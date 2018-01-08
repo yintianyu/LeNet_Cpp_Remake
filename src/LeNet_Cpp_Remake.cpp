@@ -51,7 +51,7 @@ int main() {
         }
 
     }
-    cout << "Finished! Correct rate:" << (double)correct_count / (BATCH_SIZE * LOOP_TIME) << endl;
+    cout << "Finished! Correct rate:" << (float)correct_count / (BATCH_SIZE * LOOP_TIME) << endl;
 	return 0;
 }
 

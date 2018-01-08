@@ -16,7 +16,7 @@ int cnn(float picture[FEATURE_SIZE][FEATURE_SIZE]);
 template <int KERNEL_SIZE>
 struct kernel{
     float W[KERNEL_SIZE][KERNEL_SIZE];
-    float delta_W[KERNEL_SIZE][KERNEL_SIZE];
+//    float delta_W[KERNEL_SIZE][KERNEL_SIZE];
 };
 
 
