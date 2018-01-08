@@ -27,7 +27,6 @@ float image7[DENSE_7_OUTPUT_NUMBER];
 float image8[DENSE_8_OUTPUT_NUMBER];
 int cnn(float picture[FEATURE_SIZE][FEATURE_SIZE])
 {
-#ifndef DEBUG
     forward_Conv_1(picture);
     forward_Pooling_2();
     forward_Conv_3();
@@ -36,46 +35,8 @@ int cnn(float picture[FEATURE_SIZE][FEATURE_SIZE])
     forward_Flatten_6();
     forward_Dense_7();
     return forward_Dense_8();
-#else
-    forward_Conv_1(picture);
-    forward_Pooling_2();
-    forward_Conv_3();
-    forward_Conv_4();
-    forward_Pooling_5();
-    forward_Flatten_6();
-    forward_Dense_7();
-    return forward_Dense_8();
-//    return 0;
-#endif
 }
 
-
-//void cnn_init()
-//{
-//    cnn_init_onelayer(&Conv_1, 0.01);
-//    cnn_init_onelayer(&Conv_3, 0.01);
-//    cnn_init_onelayer(&Conv_4, 0.01);
-//}
-
-//template<int MAP_NUM, int KERNEL_SIZE, int OUTPUT_NUMBER, int OUT_SIZE>
-//void cnn_init_onelayer(conv_layer<MAP_NUM, KERNEL_SIZE, OUTPUT_NUMBER, OUT_SIZE> *pstLayer, float initnumber)
-//{
-//    for(int i = 0; i < MAP_NUM; i++)
-//    {
-//        for(int j = 0; j < KERNEL_SIZE; j++)
-//        {
-//            for(int k = 0; k < KERNEL_SIZE; k++)
-//            {
-//                pstLayer->maps[i].W[j][k] = initnumber;
-//                pstLayer->maps[i].delta_W[j][k] = 0;
-//            }
-//        }
-//    }
-//    for(int i = 0; i < OUTPUT_NUMBER; i++)
-//    {
-//        pstLayer->bias[i] = initnumber;
-//    }
-//}
 
 /*
  * º¯ÊýÃû³Æ£ºforward_Conv_1
@@ -212,27 +173,7 @@ void forward_Dense_7()
 {
     float temp[DENSE_7_OUTPUT_NUMBER];
     matrix_MMV<DENSE_7_INPUT_NUMBER, DENSE_7_OUTPUT_NUMBER>(image6, Dense_7.W, temp);
-#ifdef DEBUGPRINT
-//    for(int i = 0; i < 16; i++)
-//    {
-//        for(int j = 0; j < 8; j++)
-//        {
-//            cout << temp[i * 8 + j] << "\t";
-//        }
-//        cout << endl;
-//    }
-#endif
     matrix_vector_tanh<DENSE_7_OUTPUT_NUMBER>(temp, image7, Dense_7.bias);
-#ifdef DEBUGPRINT
-//    for(int i = 0; i < 16; i++)
-//    {
-//        for(int j = 0; j < 8; j++)
-//        {
-//            cout << image7[i * 8 + j] << " \t";
-//        }
-//        cout << endl;
-//    }
-#endif
 }
 
 /*

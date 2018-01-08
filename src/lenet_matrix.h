@@ -60,17 +60,8 @@ void matrix_convolution(const float picture[][picture_size],
                 }
             }
             result[i][j] = temp;
-#ifdef DEBUG
-//            cout << result[i][j] << " ";
-#endif
         }
-#ifdef DEBUG
-//        cout << endl;
-#endif
     }
-#ifdef DEBUG
-//    cout << "*****************" << endl << endl;
-#endif
     return;
 }
 
@@ -92,17 +83,8 @@ void matrix_multi_convolution(const float pictures[picture_number][picture_size]
     for(int i = 0; i < picture_number; i++)
     {
         matrix_convolution<picture_size, kernel_size>(pictures[i], kernel[i], temp);
-#ifdef DEBUG
-//        cout << "c: " << temp[0][0] << endl;
-#endif
         matrix_add<picture_size - kernel_size + 1>(aggregate, temp);
-#ifdef DEBUG
-//        cout << "\tagg: " << aggregate[0][0] << endl;
-#endif
     }
-#ifdef DEBUG
-//        cout << "agg: " << aggregate[0][0] << endl;
-#endif
     memcpy(result, aggregate, sizeof(float) * (picture_size - kernel_size + 1) * (picture_size - kernel_size + 1));
 }
 
@@ -180,13 +162,7 @@ int matrix_softmax(const float input[inputsize],
     for(int i = 0; i < inputsize; i++)
     {
         index = output[i] > output[index] ? i : index;
-#ifdef DEBUG
-//        cout << "Softmax result:" << result[index] << " ";
-#endif
     }
-#ifdef DEBUG
-        cout << endl;
-#endif
     return index;
 }
 
@@ -210,10 +186,6 @@ void matrix_pooling(float input[size][size], float output[size / 2][size / 2])
             float temp1 = input[i][j] > input[i][j + 1] ? input[i][j] : input[i][j + 1];
             float temp2 = input[i + 1][j] > input[i + 1][j + 1] ? input[i + 1][j] : input[i + 1][j + 1];
             output[i >> 1][j >> 1] = temp1 > temp2 ? temp1 : temp2;
-#ifdef DEBUG
-//            cout << "4 numbers: " << input[i][j] << " " << input[i][j + 1] << " " << input[i + 1][j] << " " << input[i + 1][j + 1] << endl;
-//            cout << "\t we choose: " << output[i >> 1][j >> 1] << endl;
-#endif
         }
     }
     return;
