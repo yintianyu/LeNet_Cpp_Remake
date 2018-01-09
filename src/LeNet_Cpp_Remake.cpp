@@ -7,7 +7,7 @@
 //============================================================================
 
 #include <iostream>
-#include "cstdio"
+#include <cstdio>
 #include "lenet_define.h"
 #include "lenet_commonfunc.h"
 #include "lenet_cnn.h"
