@@ -7,7 +7,7 @@
 
 #ifndef LENET_MATH_H_
 #define LENET_MATH_H_
-#include <iostream>
+#include <cstdio>
 using namespace std;
 float math_tanh(const float &x);
 float math_exp(const float &x);

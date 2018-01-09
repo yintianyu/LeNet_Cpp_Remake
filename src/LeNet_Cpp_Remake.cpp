@@ -6,7 +6,6 @@
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
-#include <iostream>
 #include <cstdio>
 #include "lenet_define.h"
 #include "lenet_commonfunc.h"
@@ -41,17 +40,17 @@ int main() {
             answer = Mnist_Label[j];
             if (answer == reference)
             {
-                cout << "Batch No." << t << ", Picture No. " << j << " Correct!" << endl;
+                printf("Batch No.%d, Picture No.%d Correct!\n", t, j);
                 correct_count++;
             }
             else
             {
-                cout << "Batch No." << t << ", Picture No. " << j << " Incorrect:" << answer << ":" << reference << endl;
+                printf("Batch No.%d, Picture No.%d Incorrect: %d:%d\n", t, j, answer, reference);
             }
         }
 
     }
-    cout << "Finished! Correct rate:" << (float)correct_count / (BATCH_SIZE * LOOP_TIME) << endl;
+    printf("Finished! Correct rate:%f%%.\n", (float)correct_count / (BATCH_SIZE * LOOP_TIME) * 100);
 	return 0;
 }
 

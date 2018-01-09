@@ -9,7 +9,7 @@
 #define LENET_MATRIX_H_
 
 
-#include <iostream>
+#include <cstdio>
 #include "lenet_math.h"
 using namespace std;
 /*
