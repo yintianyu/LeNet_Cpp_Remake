@@ -1,9 +1,16 @@
 CC = riscv32-unknown-elf-g++
+OBJC = riscv32-unknown-elf-objcopy
 CFLAGS = -DRISCV
 VPATH = src
 blddir = build
 source = $(notdir $(wildcard src/*.cpp))
 objects = $(source:%.c=$(blddir)/%.o)
+$(blddir)/lenet.hex: $(blddir)/lenet.bin
+	$(OBJC) -I binary -O ihex $^ $@
+
+$(blddir)/lenet.bin: $(blddir)/lenet.elf
+	$(OBJC) -O binary $^ $@
+
 $(blddir)/lenet.elf: ${objects}
 	$(CC) -o $@ $^ $(CFLAGS)
 
