@@ -7,8 +7,7 @@
 
 #ifndef LENET_DEFINE_H_
 #define LENET_DEFINE_H_
-#include <iostream>
-using namespace std;
+#include <stdio.h>
 
 #define BATCH_SIZE 10
 #define FEATURE_SIZE 28

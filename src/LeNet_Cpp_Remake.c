@@ -6,11 +6,10 @@
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
-#include <cstdio>
+#include <stdio.h>
 #include "lenet_define.h"
 #include "lenet_commonfunc.h"
 #include "lenet_cnn.h"
-using namespace std;
 
 
 int main() {

@@ -13,27 +13,42 @@ int cnn(float picture[FEATURE_SIZE][FEATURE_SIZE]);
 
 
 /*typedef*/
-template <int KERNEL_SIZE>
-struct kernel{
-    float W[KERNEL_SIZE][KERNEL_SIZE];
-//    float delta_W[KERNEL_SIZE][KERNEL_SIZE];
+struct maps1{
+    float W[CONV_1_KERNEL_SIZE][CONV_1_KERNEL_SIZE];
 };
 
-
-template<int MAP_NUM, int KERNEL_SIZE, int OUTPUT_NUM, int OUT_SIZE>
-struct conv_layer{
-    struct kernel<KERNEL_SIZE> maps[MAP_NUM];
-    float bias[OUTPUT_NUM];
-//    float delta_bias[OUTPUT_NUM];
-//    float Loss[OUTPUT_NUM][OUT_SIZE][OUT_SIZE];
+struct maps3{
+    float W[CONV_3_KERNEL_SIZE][CONV_3_KERNEL_SIZE];
 };
 
-template<int input_number, int output_number>
-struct dense_layer{
-    float W[output_number][input_number];
-    float bias[output_number];
+struct maps4{
+    float W[CONV_4_KERNEL_SIZE][CONV_4_KERNEL_SIZE];
 };
 
+struct conv1_layer{
+    struct maps1 maps[CONV_1_MAP_NUMBER];
+    float bias[CONV_1_OUTPUT_NUMBER];
+};
+
+struct conv3_layer{
+    struct maps3 maps[CONV_3_MAP_NUMBER];
+    float bias[CONV_3_OUTPUT_NUMBER];
+};
+
+struct conv4_layer{
+    struct maps4 maps[CONV_4_MAP_NUMBER];
+    float bias[CONV_4_OUTPUT_NUMBER];
+};
+
+struct dense7_layer{
+    float W[DENSE_7_OUTPUT_NUMBER][DENSE_7_INPUT_NUMBER];
+    float bias[DENSE_7_OUTPUT_NUMBER];
+};
+
+struct dense8_layer{
+    float W[DENSE_8_OUTPUT_NUMBER][DENSE_8_INPUT_NUMBER];
+    float bias[DENSE_8_OUTPUT_NUMBER];
+};
 //
 //template<int MAP_NUM, int KERNEL_SIZE, int OUTPUT_NUMBER, int OUT_SIZE>
 //void cnn_init_onelayer(conv_layer<MAP_NUM, KERNEL_SIZE, OUTPUT_NUMBER, OUT_SIZE> *pstLayer, float initnumber);
@@ -50,11 +65,11 @@ int forward_Dense_8();
 
 /*全局变量声明*/
 
-extern struct conv_layer<CONV_1_MAP_NUMBER, CONV_1_KERNEL_SIZE, CONV_1_OUTPUT_NUMBER, CONV_1_OUTPUT_SIZE> Conv_1;
-extern struct conv_layer<CONV_3_MAP_NUMBER, CONV_3_KERNEL_SIZE, CONV_3_OUTPUT_NUMBER, CONV_3_OUTPUT_SIZE> Conv_3;
-extern struct conv_layer<CONV_4_MAP_NUMBER, CONV_4_KERNEL_SIZE, CONV_4_OUTPUT_NUMBER, CONV_4_OUTPUT_SIZE> Conv_4;
-extern struct dense_layer<DENSE_7_INPUT_NUMBER, DENSE_7_OUTPUT_NUMBER> Dense_7;
-extern struct dense_layer<DENSE_8_INPUT_NUMBER, DENSE_8_OUTPUT_NUMBER> Dense_8;
+extern struct conv1_layer Conv_1;
+extern struct conv3_layer Conv_3;
+extern struct conv4_layer Conv_4;
+extern struct dense7_layer Dense_7;
+extern struct dense8_layer Dense_8;
 
 extern float image1[CONV_1_OUTPUT_NUMBER][CONV_1_OUTPUT_SIZE][CONV_1_OUTPUT_SIZE];
 extern float image2[POOLING_2_OUTPUT_NUMBER][POOLING_2_OUTPUT_SIZE][POOLING_2_OUTPUT_SIZE];

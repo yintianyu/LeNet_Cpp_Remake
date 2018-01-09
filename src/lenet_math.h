@@ -7,10 +7,9 @@
 
 #ifndef LENET_MATH_H_
 #define LENET_MATH_H_
-#include <cstdio>
-using namespace std;
-float math_tanh(const float &x);
-float math_exp(const float &x);
+#include <stdio.h>
+float math_tanh(const float x);
+float math_exp(const float x);
 
 
 /*
@@ -20,35 +19,11 @@ float math_exp(const float &x);
  * 输出：float 计算结果
  * 修改记录：
  *      1. 创建新函数(2018-1-6)
+ *      2. 改为C风格(2018-1-9)
  */
-inline float power(const float &x, const int &n)
-{
-    float y = 1;
-    for(int i = 0; i < n; i++)
-    {
-        y *= x;
-    }
-    return y;
-}
+float power(const float x, const int n);
 
-inline int factorial(const int &x)
-{
-    if (0 == x)
-    {
-        return 1;
-    }
-    if (0 > x)
-    {
-        return -1;
-    }
-    int y = 1;
-    for(int i = x; i > 0; i--)
-    {
-        y *= i;
-    }
-    return y;
-}
-
+int factorial(const int x);
 
 
 #endif /* LENET_MATH_H_ */

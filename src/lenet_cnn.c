@@ -4,16 +4,16 @@
  *  Created on: 2018Äê1ÔÂ5ÈÕ
  *      Author: admin
  */
-#include <cstring>
+#include <string.h>
 #include "lenet_matrix.h"
 #include "lenet_cnn.h"
 
 /* Layers */
-struct conv_layer<CONV_1_MAP_NUMBER, CONV_1_KERNEL_SIZE, CONV_1_OUTPUT_NUMBER, CONV_1_OUTPUT_SIZE> Conv_1;
-struct conv_layer<CONV_3_MAP_NUMBER, CONV_3_KERNEL_SIZE, CONV_3_OUTPUT_NUMBER, CONV_3_OUTPUT_SIZE> Conv_3;
-struct conv_layer<CONV_4_MAP_NUMBER, CONV_4_KERNEL_SIZE, CONV_4_OUTPUT_NUMBER, CONV_4_OUTPUT_SIZE> Conv_4;
-struct dense_layer<DENSE_7_INPUT_NUMBER, DENSE_7_OUTPUT_NUMBER> Dense_7;
-struct dense_layer<DENSE_8_INPUT_NUMBER, DENSE_8_OUTPUT_NUMBER> Dense_8;
+struct conv1_layer Conv_1;
+struct conv3_layer Conv_3;
+struct conv4_layer Conv_4;
+struct dense7_layer Dense_7;
+struct dense8_layer Dense_8;
 
 
 /* Features of the layers*/
@@ -51,8 +51,8 @@ void forward_Conv_1(float picture[][FEATURE_SIZE])
     for(int i = 0; i < CONV_1_OUTPUT_NUMBER; i++)
     {
         float temp[CONV_1_OUTPUT_SIZE][CONV_1_OUTPUT_SIZE];
-        matrix_convolution<FEATURE_SIZE, CONV_1_KERNEL_SIZE>(picture, Conv_1.maps[i].W, temp);
-        matrix_matrice_tanh<CONV_1_OUTPUT_SIZE>(temp, image1[i], Conv_1.bias[i]);
+        matrix_convolution_28_5(picture, Conv_1.maps[i].W, temp);
+        matrix_matrice_tanh_24(temp, image1[i], Conv_1.bias[i]);
     }
 }
 
@@ -68,7 +68,7 @@ void forward_Pooling_2()
 {
     for(int i = 0; i < POOLING_2_OUTPUT_NUMBER; i++)
     {
-        matrix_pooling<CONV_1_OUTPUT_SIZE>(image1[i], image2[i]);
+        matrix_pooling_24(image1[i], image2[i]);
     }
 }
 
@@ -90,8 +90,8 @@ void forward_Conv_3()
         {
             memcpy(weight_part[j], Conv_3.maps[i * POOLING_2_OUTPUT_NUMBER + j].W, sizeof(float) * CONV_3_KERNEL_SIZE * CONV_3_KERNEL_SIZE);
         }
-        matrix_multi_convolution<POOLING_2_OUTPUT_SIZE, POOLING_2_OUTPUT_NUMBER, CONV_3_KERNEL_SIZE>(image2, weight_part, temp);
-        matrix_matrice_tanh<CONV_3_OUTPUT_SIZE>(temp, image3[i], Conv_3.bias[i]);
+        matrix_multi_convolution_12_3(image2, weight_part, temp);
+        matrix_matrice_tanh_10(temp, image3[i], Conv_3.bias[i]);
     }
 }
 
@@ -114,8 +114,8 @@ void forward_Conv_4()
         {
             memcpy(weight_part[j], Conv_4.maps[i * CONV_3_OUTPUT_NUMBER + j].W, sizeof(float) * CONV_4_KERNEL_SIZE * CONV_4_KERNEL_SIZE);
         }
-        matrix_multi_convolution<CONV_3_OUTPUT_SIZE, CONV_3_OUTPUT_NUMBER, CONV_4_KERNEL_SIZE>(image3, weight_part, temp);
-        matrix_matrice_tanh<CONV_4_OUTPUT_SIZE>(temp, image4[i], Conv_4.bias[i]);
+        matrix_multi_convolution_10_3(image3, weight_part, temp);
+        matrix_matrice_tanh_8(temp, image4[i], Conv_4.bias[i]);
     }
 }
 
@@ -132,7 +132,7 @@ void forward_Pooling_5()
 {
     for(int i = 0; i < POOLING_5_OUTPUT_NUMBER; i++)
     {
-        matrix_pooling<CONV_4_OUTPUT_SIZE>(image4[i], image5[i]);
+        matrix_pooling_8(image4[i], image5[i]);
     }
 }
 
@@ -172,8 +172,8 @@ void forward_Flatten_6()
 void forward_Dense_7()
 {
     float temp[DENSE_7_OUTPUT_NUMBER];
-    matrix_MMV<DENSE_7_INPUT_NUMBER, DENSE_7_OUTPUT_NUMBER>(image6, Dense_7.W, temp);
-    matrix_vector_tanh<DENSE_7_OUTPUT_NUMBER>(temp, image7, Dense_7.bias);
+    matrix_MMV_256_128(image6, Dense_7.W, temp);
+    matrix_vector_tanh_128(temp, image7, Dense_7.bias);
 }
 
 /*
@@ -188,7 +188,7 @@ void forward_Dense_7()
 int forward_Dense_8()
 {
     float temp[DENSE_8_OUTPUT_NUMBER];
-    matrix_MMV<DENSE_8_INPUT_NUMBER, DENSE_8_OUTPUT_NUMBER>(image7, Dense_8.W, temp);
-    return matrix_softmax<DENSE_8_OUTPUT_NUMBER>(temp, image8, Dense_7.bias);
+    matrix_MMV_128_10(image7, Dense_8.W, temp);
+    return matrix_softmax_10(temp, image8, Dense_7.bias);
 }
 

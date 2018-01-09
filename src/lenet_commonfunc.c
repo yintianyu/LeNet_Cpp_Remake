@@ -5,7 +5,7 @@
  *      Author: admin
  */
 
-#include <cstring>
+#include <string.h>
 #include "lenet_commonfunc.h"
 #include "lenet_cnn.h"
 
@@ -19,7 +19,7 @@ int read_Mnist(int begin_number, int end_number, float Feature[][FEATURE_SIZE][F
     fp = fopen(imagefile, "rb");
     if (NULL == fp)
     {
-        cout << "Can't Open " << imagefile << endl;
+        printf("Can't Open %s.\n", imagefile);
         return 1;
     }
     fseek(fp, begin_number * 784 + 16, SEEK_SET);
@@ -39,7 +39,7 @@ int read_Mnist(int begin_number, int end_number, float Feature[][FEATURE_SIZE][F
     fp = fopen(labelfile, "rb");
     if(NULL == fp)
     {
-        cout << "Can't Open " << labelfile << endl;
+        printf("Can't Open %s.\n", labelfile);
         return 2;
     }
     fseek(fp, begin_number + 8, SEEK_SET);
