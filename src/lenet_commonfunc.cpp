@@ -216,19 +216,19 @@ int read_data()
 
 
     //Read Conv3
-    for(int i = 0; i < CONV_3_OUTPUT_NUMBER; i++)
+    for(int i = 0; i < CONV_3_OUTPUT_NUMBER * POOLING_2_OUTPUT_NUMBER; i++)
     {
         pstTemp = (void*)(ADDRESS_CONV3_WEIGHT + i * SIZE_DATA * CONV_3_KERNEL_SIZE * CONV_3_KERNEL_SIZE);
-        Conv_3.maps[i].W = ADDRESS_CONV3_WEIGHT + i * SIZE_DATA * CONV_3_KERNEL_SIZE * CONV_3_KERNEL_SIZE;
+        memcpy(Conv_3.maps[i].W, pstTemp, SIZE_DATA * CONV_3_KERNEL_SIZE * CONV_3_KERNEL_SIZE);
     }
     pstTemp = (void*)ADDRESS_CONV3_BIAS;
     memcpy(Conv_3.bias, pstTemp, SIZE_DATA * CONV_3_OUTPUT_NUMBER);
 
     //Read Conv4
-    for(int i = 0; i < CONV_4_OUTPUT_NUMBER; i++)
+    for(int i = 0; i < CONV_4_OUTPUT_NUMBER * CONV_3_OUTPUT_NUMBER; i++)
     {
         pstTemp = (void*)(ADDRESS_CONV4_WEIGHT + i * SIZE_DATA * CONV_4_KERNEL_SIZE * CONV_4_KERNEL_SIZE);
-        Conv_4.maps[i].W = ADDRESS_CONV4_WEIGHT + i * SIZE_DATA * CONV_4_KERNEL_SIZE * CONV_4_KERNEL_SIZE;
+        memcpy(Conv_4.maps[i].W, pstTemp, SIZE_DATA * CONV_4_KERNEL_SIZE * CONV_4_KERNEL_SIZE);
     }
     pstTemp = (void*)ADDRESS_CONV4_BIAS;
     memcpy(Conv_4.bias, pstTemp, SIZE_DATA * CONV_4_OUTPUT_NUMBER);
