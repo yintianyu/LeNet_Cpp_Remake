@@ -21,7 +21,7 @@ int main() {
     read_status = read_data();
     if(0 != read_status)
     {
-        cout << read_status << endl;
+        printf("read_status: %d\n",read_status);
         return 2;
     }
     for(int t = 0; t < LOOP_TIME; t++)
@@ -31,7 +31,7 @@ int main() {
         read_status = read_Mnist(t * BATCH_SIZE, (t + 1) * BATCH_SIZE, feature, Mnist_Label);
         if(0 != read_status)
         {
-            cout << read_status << endl;
+            printf("read_status: %d\n",read_status);
             return 1;
         }
         for(int j = 0; j < BATCH_SIZE; j++)
