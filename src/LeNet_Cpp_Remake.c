@@ -18,7 +18,9 @@ int main() {
     int correct_count = 0;
     int read_status;
     read_status = read_data();
+#ifdef RISCV
     printf("Read Data Finished.\n");
+#endif
     if(0 != read_status)
     {
         printf("read_status: %d\n",read_status);
@@ -29,7 +31,9 @@ int main() {
         int reference;
         int answer;
         read_status = read_Mnist(t * BATCH_SIZE, (t + 1) * BATCH_SIZE, feature, Mnist_Label);
+#ifdef RISCV
         printf("Read Mnist Finished.\n");
+#endif
         if(0 != read_status)
         {
             printf("read_status: %d\n",read_status);

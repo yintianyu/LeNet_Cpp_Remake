@@ -6,7 +6,7 @@
  */
 #include "lenet_math.h"
 #include "lenet_define.h"
-int ExpTable[3000] = {                    0,
+int ExpTable[2001] = {                    0,
                     0,
                     0,
                     0,
@@ -5053,12 +5053,16 @@ int math_tanh(int x)
  */
 int math_exp(int x)
 {
-    int bias = x + (30 << FLOATPOINT);
+    int bias = x + (10 << FLOATPOINT);
     if (bias < 0)
     {
         bias = 0;
     }
     int index = bias / 41;
+    if(index > 2000)
+    {
+        index = 2000;
+    }
     return ExpTable[index];
 }
 

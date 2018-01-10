@@ -27,21 +27,37 @@ int image7[DENSE_7_OUTPUT_NUMBER];
 int image8[DENSE_8_OUTPUT_NUMBER];
 int cnn(int picture[FEATURE_SIZE][FEATURE_SIZE])
 {
+#ifdef RISCV
     printf("In cnn.\n");
+#endif
     forward_Conv_1(picture);
+#ifdef RISCV
     printf("Conv1 end.\n");
+#endif
     forward_Pooling_2();
+#ifdef RISCV
     printf("Pooling2 end.\n");
+#endif
     forward_Conv_3();
+#ifdef RISCV
     printf("Conv3 end.\n");
+#endif
     forward_Conv_4();
+#ifdef RISCV
     printf("Conv4 end.\n");
+#endif
     forward_Pooling_5();
+#ifdef RISCV
     printf("Pooling5 end.\n");
+#endif
     forward_Flatten_6();
+#ifdef RISCV
     printf("Flatten6 end.\n");
+#endif
     forward_Dense_7();
+#ifdef RISCV
     printf("Dense7 end.\n");
+#endif
     return forward_Dense_8();
 }
 
