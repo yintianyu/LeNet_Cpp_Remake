@@ -13,11 +13,12 @@
 
 
 int main() {
-    float feature[BATCH_SIZE][FEATURE_SIZE][FEATURE_SIZE] = {0};
+    int feature[BATCH_SIZE][FEATURE_SIZE][FEATURE_SIZE] = {0};
     int Mnist_Label[BATCH_SIZE] = {0};
     int correct_count = 0;
     int read_status;
     read_status = read_data();
+    printf("Read Data Finished.\n");
     if(0 != read_status)
     {
         printf("read_status: %d\n",read_status);
@@ -28,6 +29,7 @@ int main() {
         int reference;
         int answer;
         read_status = read_Mnist(t * BATCH_SIZE, (t + 1) * BATCH_SIZE, feature, Mnist_Label);
+        printf("Read Mnist Finished.\n");
         if(0 != read_status)
         {
             printf("read_status: %d\n",read_status);
@@ -49,7 +51,7 @@ int main() {
         }
 
     }
-    printf("Finished! Correct rate:%f%%.\n", (float)correct_count / (BATCH_SIZE * LOOP_TIME) * 100);
+    printf("Finished! Correct Number:%d.\n", correct_count);
 	return 0;
 }
 

@@ -9,8 +9,8 @@
 #define LENET_DEFINE_H_
 #include <stdio.h>
 #ifdef RISCV
-#include "sc_print.h"
-#define printf sc_printf
+//#include "sc_print.h"
+//#define printf sc_printf
 #endif
 #define BATCH_SIZE 20
 #define FEATURE_SIZE 28
@@ -18,6 +18,8 @@
 #define LOOP_TIME 500
 #define UPDATE_NUMBER 20
 
+#define FLOATPOINT (12) //整数>>12后为小数
+#define MULFACTOR   (4096)  // 2 ^ 12 = 4096
 
 
 //层的参数

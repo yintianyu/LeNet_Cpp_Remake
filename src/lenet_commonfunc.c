@@ -11,7 +11,7 @@
 
 
 #ifdef X86
-int read_Mnist(int begin_number, int end_number, float Feature[][FEATURE_SIZE][FEATURE_SIZE], int label[])
+int read_Mnist(int begin_number, int end_number, int Feature[][FEATURE_SIZE][FEATURE_SIZE], int label[])
 {
     FILE *fp;
     char imagefile[] = ".\\data\\t10k-images.idx3-ubyte";
@@ -31,7 +31,7 @@ int read_Mnist(int begin_number, int end_number, float Feature[][FEATURE_SIZE][F
             fread(picture[j], sizeof(unsigned char), FEATURE_SIZE, fp);
             for(int k = 0; k < FEATURE_SIZE; k++)
             {
-                Feature[i][j][k] = (float)picture[j][k] / 255;
+                Feature[i][j][k] = (int)(((float)picture[j][k] / 255) * MULFACTOR);
             }
         }
     }
@@ -76,7 +76,17 @@ int read_data()
     }
     for(int i = 0; i < CONV_1_MAP_NUMBER; i++)
     {
-        fread(Conv_1.maps[i].W, CONV_1_KERNEL_SIZE * CONV_1_KERNEL_SIZE, sizeof(float), fp);
+        for(int j = 0; j < CONV_1_KERNEL_SIZE; j++)
+        {
+            for(int k = 0; k < CONV_1_KERNEL_SIZE; k++)
+            {
+                float temp;
+                int tempint;
+                fread(&temp, 1, sizeof(float), fp);
+                tempint = (int)(temp * MULFACTOR);
+                memcpy(&Conv_1.maps[i].W[j][k], &tempint, sizeof(int));
+            }
+        }
     }
     fclose(fp);
     /*结束读一个文件*/
@@ -87,7 +97,14 @@ int read_data()
     {
         return 12;
     }
-    fread(Conv_1.bias, CONV_1_OUTPUT_NUMBER, sizeof(float), fp);
+    for(int i = 0; i < CONV_1_OUTPUT_NUMBER; i++)
+    {
+        float temp;
+        int tempint;
+        fread(&temp, 1, sizeof(float), fp);
+        tempint = (int)(temp * MULFACTOR);
+        memcpy(&Conv_1.bias[i], &tempint, sizeof(int));
+    }
     fclose(fp);
     /*结束读一个文件*/
 
@@ -100,7 +117,17 @@ int read_data()
     }
     for(int i = 0; i < CONV_3_MAP_NUMBER; i++)
     {
-        fread(Conv_3.maps[i].W, CONV_3_KERNEL_SIZE * CONV_3_KERNEL_SIZE, sizeof(float), fp);
+        for(int j = 0; j < CONV_3_KERNEL_SIZE; j++)
+        {
+            for(int k = 0; k < CONV_3_KERNEL_SIZE; k++)
+            {
+                float temp;
+                int tempint;
+                fread(&temp, 1, sizeof(float), fp);
+                tempint = (int)(temp * MULFACTOR);
+                memcpy(&Conv_3.maps[i].W[j][k], &tempint, sizeof(int));
+            }
+        }
     }
     fclose(fp);
     /*结束读一个文件*/
@@ -111,7 +138,14 @@ int read_data()
     {
         return 32;
     }
-    fread(Conv_3.bias, CONV_3_OUTPUT_NUMBER, sizeof(float), fp);
+    for(int i = 0; i < CONV_3_OUTPUT_NUMBER; i++)
+    {
+        float temp;
+        int tempint;
+        fread(&temp, 1, sizeof(float), fp);
+        tempint = (int)(temp * MULFACTOR);
+        memcpy(&Conv_3.bias[i], &tempint, sizeof(int));
+    }
     fclose(fp);
     /*结束读一个文件*/
 
@@ -124,7 +158,17 @@ int read_data()
     }
     for(int i = 0; i < CONV_4_MAP_NUMBER; i++)
     {
-        fread(Conv_4.maps[i].W, CONV_4_KERNEL_SIZE * CONV_4_KERNEL_SIZE, sizeof(float), fp);
+        for(int j = 0; j < CONV_4_KERNEL_SIZE; j++)
+        {
+            for(int k = 0; k < CONV_4_KERNEL_SIZE; k++)
+            {
+                float temp;
+                int tempint;
+                fread(&temp, 1, sizeof(float), fp);
+                tempint = (int)(temp * MULFACTOR);
+                memcpy(&Conv_4.maps[i].W[j][k], &tempint, sizeof(int));
+            }
+        }
     }
     fclose(fp);
     /*结束读一个文件*/
@@ -135,7 +179,14 @@ int read_data()
     {
         return 42;
     }
-    fread(Conv_4.bias, CONV_4_OUTPUT_NUMBER, sizeof(float), fp);
+    for(int i = 0; i < CONV_4_OUTPUT_NUMBER; i++)
+    {
+        float temp;
+        int tempint;
+        fread(&temp, 1, sizeof(float), fp);
+        tempint = (int)(temp * MULFACTOR);
+        memcpy(&Conv_4.bias[i], &tempint, sizeof(int));
+    }
     fclose(fp);
     /*结束读一个文件*/
 
@@ -147,7 +198,14 @@ int read_data()
     }
     for(int i = 0; i < DENSE_7_OUTPUT_NUMBER; i++)
     {
-        fread(Dense_7.W[i], DENSE_7_INPUT_NUMBER, sizeof(float), fp);
+        for(int j = 0; j < DENSE_7_INPUT_NUMBER; j++)
+        {
+            float temp;
+            int tempint;
+            fread(&temp, 1, sizeof(float), fp);
+            tempint = (int)(temp * MULFACTOR);
+            memcpy(&Dense_7.W[i][j], &tempint, sizeof(int));
+        }
     }
     fclose(fp);
     /*结束读一个文件*/
@@ -158,7 +216,14 @@ int read_data()
     {
         return 72;
     }
-    fread(Dense_7.bias, DENSE_7_OUTPUT_NUMBER, sizeof(float), fp);
+    for(int i = 0; i < DENSE_7_OUTPUT_NUMBER; i++)
+    {
+        float temp;
+        int tempint;
+        fread(&temp, 1, sizeof(float), fp);
+        tempint = (int)(temp * MULFACTOR);
+        memcpy(&Dense_7.bias[i], &tempint, sizeof(int));
+    }
     fclose(fp);
     /*结束读一个文件*/
 
@@ -170,7 +235,14 @@ int read_data()
     }
     for(int i = 0; i < DENSE_8_OUTPUT_NUMBER; i++)
     {
-        fread(Dense_8.W[i], DENSE_8_INPUT_NUMBER, sizeof(float), fp);
+        for(int j = 0; j < DENSE_8_INPUT_NUMBER; j++)
+        {
+            float temp;
+            int tempint;
+            fread(&temp, 1, sizeof(float), fp);
+            tempint = (int)(temp * MULFACTOR);
+            memcpy(&Dense_8.W[i][j], &tempint, sizeof(int));
+        }
     }
     fclose(fp);
     /*结束读一个文件*/
@@ -181,7 +253,14 @@ int read_data()
     {
         return 82;
     }
-    fread(Dense_8.bias, DENSE_8_OUTPUT_NUMBER, sizeof(float), fp);
+    for(int i = 0; i < DENSE_8_OUTPUT_NUMBER; i++)
+    {
+        float temp;
+        int tempint;
+        fread(&temp, 1, sizeof(float), fp);
+        tempint = (int)(temp * MULFACTOR);
+        memcpy(&Dense_8.bias[i], &tempint, sizeof(int));
+    }
     fclose(fp);
     /*结束读一个文件*/
 
@@ -190,7 +269,7 @@ int read_data()
 #endif
 
 #ifdef RISCV
-int read_Mnist(int begin_number, int end_number, float Feature[][FEATURE_SIZE][FEATURE_SIZE], int label[])
+int read_Mnist(int begin_number, int end_number, int Feature[][FEATURE_SIZE][FEATURE_SIZE], int label[])
 {
     void *pstFeatureStart = (void*)(ADDRESS_MNIST_FEATURE + FEATURE_SIZE * FEATURE_SIZE * begin_number);
     memcpy(Feature, pstFeatureStart, SIZE_FEATURE * (end_number - begin_number));

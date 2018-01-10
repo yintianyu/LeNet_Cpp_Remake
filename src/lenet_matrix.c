@@ -11,6 +11,7 @@
 #include <string.h>
 #include "lenet_math.h"
 #include "lenet_matrix.h"
+#include "lenet_define.h"
 /*
  * 函数名称：matrix_add
  * 功能：矩阵加法运算
@@ -20,8 +21,9 @@
  *      1. 创建新函数(2018-1-6)
  *      2. 由dst+=dst+src;改为dst=dst+src;(2018-1-8)
  *      3. 改为C风格(2018-1-9)
+ *      4. 改为定点数(2018-1-10)
  */
-void matrix_add_24(float dst[][24], float src[][24])
+void matrix_add_24(int dst[][24], int src[][24])
 {
     for(int i = 0; i < 24; i++)
     {
@@ -32,7 +34,7 @@ void matrix_add_24(float dst[][24], float src[][24])
     }
 }
 
-void matrix_add_10(float dst[][10], float src[][10])
+void matrix_add_10(int dst[][10], int src[][10])
 {
     for(int i = 0; i < 10; i++)
     {
@@ -43,7 +45,7 @@ void matrix_add_10(float dst[][10], float src[][10])
     }
 }
 
-void matrix_add_8(float dst[][8], float src[][8])
+void matrix_add_8(int dst[][8], int src[][8])
 {
     for(int i = 0; i < 8; i++)
     {
@@ -62,10 +64,11 @@ void matrix_add_8(float dst[][8], float src[][8])
  * 修改记录：
  *      1. 创建新函数(2018-1-6)
  *      2. 改为C风格(2018-1-9)
+ *      3. 改为定点数(2018-1-10)
  */
-void matrix_convolution_28_5(float picture[][28],
-        float kernel[][5],
-        float result[][24])
+void matrix_convolution_28_5(int picture[][28],
+        int kernel[][5],
+        int result[][24])
 {
     int result_size = 24;
     int kernel_size = 5;
@@ -73,12 +76,12 @@ void matrix_convolution_28_5(float picture[][28],
     {
         for(int j = 0; j < result_size; j++)
         {
-            float temp = 0;
+            int temp = 0;
             for(int k = 0; k < kernel_size; k++)
             {
                 for(int l = 0; l < kernel_size; l++)
                 {
-                    temp += picture[i + k][j + l] * kernel[k][l];
+                    temp += picture[i + k][j + l] * kernel[k][l] >> FLOATPOINT;
                 }
             }
             result[i][j] = temp;
@@ -87,9 +90,9 @@ void matrix_convolution_28_5(float picture[][28],
     return;
 }
 
-void matrix_convolution_12_3(float picture[][12],
-        float kernel[][3],
-        float result[][10])
+void matrix_convolution_12_3(int picture[][12],
+        int kernel[][3],
+        int result[][10])
 {
     int result_size = 10;
     int kernel_size = 3;
@@ -97,12 +100,12 @@ void matrix_convolution_12_3(float picture[][12],
     {
         for(int j = 0; j < result_size; j++)
         {
-            float temp = 0;
+            int temp = 0;
             for(int k = 0; k < kernel_size; k++)
             {
                 for(int l = 0; l < kernel_size; l++)
                 {
-                    temp += picture[i + k][j + l] * kernel[k][l];
+                    temp += picture[i + k][j + l] * kernel[k][l] >> FLOATPOINT;
                 }
             }
             result[i][j] = temp;
@@ -111,9 +114,9 @@ void matrix_convolution_12_3(float picture[][12],
     return;
 }
 
-void matrix_convolution_10_3(float picture[][10],
-        float kernel[][3],
-        float result[][8])
+void matrix_convolution_10_3(int picture[][10],
+        int kernel[][3],
+        int result[][8])
 {
     int result_size = 8;
     int kernel_size = 3;
@@ -121,12 +124,12 @@ void matrix_convolution_10_3(float picture[][10],
     {
         for(int j = 0; j < result_size; j++)
         {
-            float temp = 0;
+            int temp = 0;
             for(int k = 0; k < kernel_size; k++)
             {
                 for(int l = 0; l < kernel_size; l++)
                 {
-                    temp += picture[i + k][j + l] * kernel[k][l];
+                    temp += picture[i + k][j + l] * kernel[k][l] >> FLOATPOINT;
                 }
             }
             result[i][j] = temp;
@@ -143,38 +146,38 @@ void matrix_convolution_10_3(float picture[][10],
  * 修改记录：
  *      1. 创建新函数(2018-1-6)
  */
-void matrix_multi_convolution_12_3(float pictures[][12][12],
-        float kernel[][3][3],
-        float result[10][10])
+void matrix_multi_convolution_12_3(int pictures[][12][12],
+        int kernel[][3][3],
+        int result[10][10])
 {
     int picture_size=12;
     int kernel_size = 3;
     int picture_number = 6;
-    float aggregate[10][10] = {0};
-    float temp[10][10];
+    int aggregate[10][10] = {0};
+    int temp[10][10];
     for(int i = 0; i < picture_number; i++)
     {
         matrix_convolution_12_3(pictures[i], kernel[i], temp);
         matrix_add_10(aggregate, temp);
     }
-    memcpy(result, aggregate, sizeof(float) * (picture_size - kernel_size + 1) * (picture_size - kernel_size + 1));
+    memcpy(result, aggregate, sizeof(int) * (picture_size - kernel_size + 1) * (picture_size - kernel_size + 1));
 }
 
-void matrix_multi_convolution_10_3(float pictures[][10][10],
-        float kernel[][3][3],
-        float result[8][8])
+void matrix_multi_convolution_10_3(int pictures[][10][10],
+        int kernel[][3][3],
+        int result[8][8])
 {
     int picture_size=10;
     int kernel_size = 3;
     int picture_number = 8;
-    float aggregate[8][8] = {0};
-    float temp[8][8];
+    int aggregate[8][8] = {0};
+    int temp[8][8];
     for(int i = 0; i < picture_number; i++)
     {
         matrix_convolution_10_3(pictures[i], kernel[i], temp);
         matrix_add_8(aggregate, temp);
     }
-    memcpy(result, aggregate, sizeof(float) * (picture_size - kernel_size + 1) * (picture_size - kernel_size + 1));
+    memcpy(result, aggregate, sizeof(int) * (picture_size - kernel_size + 1) * (picture_size - kernel_size + 1));
 }
 
 /*
@@ -186,8 +189,8 @@ void matrix_multi_convolution_10_3(float pictures[][10][10],
  *      1. 创建新函数(2018-1-6)
  *      2. 改为C风格(2018-1-9)
  */
-void matrix_matrice_tanh_24(float input[][24],
-        float output[][24], float bias)
+void matrix_matrice_tanh_24(int input[][24],
+        int output[][24], int bias)
 {
     int size = 24;
     for(int i = 0; i < size; i++)
@@ -200,8 +203,8 @@ void matrix_matrice_tanh_24(float input[][24],
     return;
 }
 
-void matrix_matrice_tanh_10(float input[][10],
-        float output[][10], float bias)
+void matrix_matrice_tanh_10(int input[][10],
+        int output[][10], int bias)
 {
     int size = 10;
     for(int i = 0; i < size; i++)
@@ -214,8 +217,8 @@ void matrix_matrice_tanh_10(float input[][10],
     return;
 }
 
-void matrix_matrice_tanh_8(float input[][8],
-        float output[][8], float bias)
+void matrix_matrice_tanh_8(int input[][8],
+        int output[][8], int bias)
 {
     int size = 8;
     for(int i = 0; i < size; i++)
@@ -237,14 +240,14 @@ void matrix_matrice_tanh_8(float input[][8],
  *      2. 把output[size] = ...改为output[i] = ...(2018-1-8)
  *      3. 改为C风格(2018-1-9)
  */
-void matrix_vector_tanh_128(float input[128],
-        float output[128],
-        float bias[128])
+void matrix_vector_tanh_128(int input[128],
+        int output[128],
+        int bias[128])
 {
     int size = 128;
     for(int i = 0; i < size; i++)
     {
-        float temp = input[i] + bias[i];
+        int temp = input[i] + bias[i];
         output[i] = math_tanh(temp);
     }
     return;
@@ -261,12 +264,12 @@ void matrix_vector_tanh_128(float input[128],
  *      2. 增加了softmax计算结果的输出(2018-1-8)
  *      3. 改为C风格(2018-1-9)
  */
-int matrix_softmax_10(float input[10],
-        float output[10],
-        float bias[10])
+int matrix_softmax_10(int input[10],
+        int output[10],
+        int bias[10])
 {
     int inputsize = 10;
-    float temp = 0;
+    int temp = 0;
     int index = 0;
     for(int i = 0; i < inputsize; i++)
     {
@@ -274,7 +277,7 @@ int matrix_softmax_10(float input[10],
     }
     for(int i = 0; i < inputsize; i++)
     {
-        output[i] = (input[i] + bias[i]) / temp;
+        output[i] = ((input[i] + bias[i]) << FLOATPOINT) / temp;
     }
     for(int i = 0; i < inputsize; i++)
     {
@@ -292,31 +295,32 @@ int matrix_softmax_10(float input[10],
  * 输出：无
  * 修改记录：
  *      1. 创建新函数(2018-1-6)
- *      3. 改为C风格(2018-1-9)
+ *      2. 改为C风格(2018-1-9)
+ *      3. 改为定点数(2018-1-10)
  */
-void matrix_pooling_24(float input[24][24], float output[12][12])
+void matrix_pooling_24(int input[24][24], int output[12][12])
 {
     int size = 24;
     for(int i = 0;i < size; i += 2)
     {
         for(int j = 0;j < size; j += 2)
         {
-            float temp1 = input[i][j] > input[i][j + 1] ? input[i][j] : input[i][j + 1];
-            float temp2 = input[i + 1][j] > input[i + 1][j + 1] ? input[i + 1][j] : input[i + 1][j + 1];
+            int temp1 = input[i][j] > input[i][j + 1] ? input[i][j] : input[i][j + 1];
+            int temp2 = input[i + 1][j] > input[i + 1][j + 1] ? input[i + 1][j] : input[i + 1][j + 1];
             output[i >> 1][j >> 1] = temp1 > temp2 ? temp1 : temp2;
         }
     }
     return;
 }
-void matrix_pooling_8(float input[8][8], float output[4][4])
+void matrix_pooling_8(int input[8][8], int output[4][4])
 {
     int size = 8;
     for(int i = 0;i < size; i += 2)
     {
         for(int j = 0;j < size; j += 2)
         {
-            float temp1 = input[i][j] > input[i][j + 1] ? input[i][j] : input[i][j + 1];
-            float temp2 = input[i + 1][j] > input[i + 1][j + 1] ? input[i + 1][j] : input[i + 1][j + 1];
+            int temp1 = input[i][j] > input[i][j + 1] ? input[i][j] : input[i][j + 1];
+            int temp2 = input[i + 1][j] > input[i + 1][j + 1] ? input[i + 1][j] : input[i + 1][j + 1];
             output[i >> 1][j >> 1] = temp1 > temp2 ? temp1 : temp2;
         }
     }
@@ -331,33 +335,34 @@ void matrix_pooling_8(float input[8][8], float output[4][4])
  * 修改记录：
  *      1. 创建新函数(2018-1-6)
  *      2. temp的类型由int改为float
+ *      3. 改为定点数(2018-1-10)
  */
-void matrix_MMV_256_128(float x[256], float weight[128][256], float output[128])
+void matrix_MMV_256_128(int x[256], int weight[128][256], int output[128])
 {
     int input_size = 256;
     int output_size = 128;
     for(int i = 0; i < output_size; i++)
     {
-        float temp = 0;
+        int temp = 0;
         for(int j = 0; j < input_size; j++)
         {
-            temp += x[j] * weight[i][j];
+            temp += (x[j] * weight[i][j]) >> FLOATPOINT;
         }
         output[i] = temp;
     }
     return;
 }
 
-void matrix_MMV_128_10(float x[128], float weight[10][128], float output[10])
+void matrix_MMV_128_10(int x[128], int weight[10][128], int output[10])
 {
     int input_size = 128;
     int output_size = 10;
     for(int i = 0; i < output_size; i++)
     {
-        float temp = 0;
+        int temp = 0;
         for(int j = 0; j < input_size; j++)
         {
-            temp += x[j] * weight[i][j];
+            temp += x[j] * weight[i][j] >> FLOATPOINT;
         }
         output[i] = temp;
     }
