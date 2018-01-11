@@ -14,7 +14,7 @@
 
 int main() {
     int feature[BATCH_SIZE][FEATURE_SIZE][FEATURE_SIZE] = {0};
-    int Mnist_Label[BATCH_SIZE] = {0};
+    unsigned char Mnist_Label[BATCH_SIZE] = {0};
     int correct_count = 0;
     int read_status;
     read_status = read_data();

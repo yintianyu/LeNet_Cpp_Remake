@@ -11,7 +11,7 @@
 
 
 #ifdef X86
-int read_Mnist(int begin_number, int end_number, int Feature[][FEATURE_SIZE][FEATURE_SIZE], int label[])
+int read_Mnist(int begin_number, int end_number, int Feature[][FEATURE_SIZE][FEATURE_SIZE], unsigned char label[])
 {
     FILE *fp;
     char imagefile[] = ".\\data\\t10k-images.idx3-ubyte";
@@ -269,7 +269,7 @@ int read_data()
 #endif
 
 #ifdef RISCV
-int read_Mnist(int begin_number, int end_number, int Feature[][FEATURE_SIZE][FEATURE_SIZE], int label[])
+int read_Mnist(int begin_number, int end_number, int Feature[][FEATURE_SIZE][FEATURE_SIZE], unsigned char label[])
 {
     void *pstFeatureStart = (void*)(ADDRESS_MNIST_FEATURE + FEATURE_SIZE * FEATURE_SIZE * begin_number);
     memcpy(Feature, pstFeatureStart, SIZE_FEATURE * (end_number - begin_number));
