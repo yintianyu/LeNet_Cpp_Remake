@@ -153,6 +153,8 @@ void matrix_MMV_128_10(int x[128], int weight[10][128], int output[10]);
 #ifdef RISCV
 extern int matrix_CMAC_5_s(int *data, int *weight, int FeatureSize);
 extern int matrix_CMAC_3_s(int *data, int *weight, int FeatureSize);
+extern int matrix_MMV_256_s(int *data, int *weight);
+extern int matrix_MMV_128_s(int *data, int *weight);
 #endif // RISCV
 
 #endif /* LENET_MATRIX_H_ */

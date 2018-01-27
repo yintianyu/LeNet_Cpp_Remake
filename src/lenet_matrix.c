@@ -358,12 +358,17 @@ void matrix_MMV_256_128(int x[256], int weight[128][256], int output[128])
     int output_size = 128;
     for(int i = 0; i < output_size; i++)
     {
+#ifdef X86
         int temp = 0;
         for(int j = 0; j < input_size; j++)
         {
             temp += (x[j] * weight[i][j]) >> FLOATPOINT;
         }
         output[i] = temp;
+#endif // X86
+#ifdef RISCV
+        output[i] = matrix_MMV_256_s(x, weight[i]);
+#endif // RISCV
     }
     return;
 }
@@ -374,12 +379,17 @@ void matrix_MMV_128_10(int x[128], int weight[10][128], int output[10])
     int output_size = 10;
     for(int i = 0; i < output_size; i++)
     {
+#ifdef X86
         int temp = 0;
         for(int j = 0; j < input_size; j++)
         {
             temp += x[j] * weight[i][j] >> FLOATPOINT;
         }
         output[i] = temp;
+#endif // X86
+#ifdef RISCV
+        output[i] = matrix_MMV_128_s(x, weight[i]);
+#endif // RISCV
     }
     return;
 }
