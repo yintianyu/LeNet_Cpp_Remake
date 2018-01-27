@@ -33,6 +33,7 @@ int main() {
         read_status = read_Mnist(t * BATCH_SIZE, (t + 1) * BATCH_SIZE, feature, Mnist_Label);
 #ifdef RISCV
         printf("Read Mnist Finished.\n");
+        printf("Label[0] = %d\n", Mnist_Label[0]);
 #endif
         if(0 != read_status)
         {

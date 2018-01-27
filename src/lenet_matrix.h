@@ -140,4 +140,19 @@ void matrix_MMV_256_128(int x[256], int weight[128][256], int output[128]);
 
 void matrix_MMV_128_10(int x[128], int weight[10][128], int output[10]);
 
+
+/*
+ * 函数名称：matrix_CMAC_5_s
+ * 功能：调用CMAC模块进行计算
+ * 输入：data地址，weight地址
+ * 输出：乘累加结果
+ * 修改记录：
+ *      1. 创建新函数(2018-1-6)
+ *      2. temp的类型由int改为float
+ */
+#ifdef RISCV
+extern int matrix_CMAC_5_s(int *data, int *weight, int FeatureSize);
+extern int matrix_CMAC_3_s(int *data, int *weight, int FeatureSize);
+#endif // RISCV
+
 #endif /* LENET_MATRIX_H_ */

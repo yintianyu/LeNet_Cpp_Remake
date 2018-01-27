@@ -76,6 +76,7 @@ void matrix_convolution_28_5(int picture[][28],
     {
         for(int j = 0; j < result_size; j++)
         {
+#ifdef X86
             int temp = 0;
             for(int k = 0; k < kernel_size; k++)
             {
@@ -85,6 +86,10 @@ void matrix_convolution_28_5(int picture[][28],
                 }
             }
             result[i][j] = temp;
+#endif // X86
+#ifdef RISCV
+            result[i][j] = matrix_CMAC_5_s(&picture[i][j], &kernel[0][0], FEATURE_SIZE * SIZE_DATA);
+#endif
         }
     }
     return;
@@ -100,6 +105,7 @@ void matrix_convolution_12_3(int picture[][12],
     {
         for(int j = 0; j < result_size; j++)
         {
+#ifdef X86
             int temp = 0;
             for(int k = 0; k < kernel_size; k++)
             {
@@ -109,6 +115,10 @@ void matrix_convolution_12_3(int picture[][12],
                 }
             }
             result[i][j] = temp;
+#endif // X86
+#ifdef RISCV
+            result[i][j] = matrix_CMAC_3_s(&picture[i][j], &kernel[0][0], 12 * SIZE_DATA);
+#endif // RISCV
         }
     }
     return;
@@ -124,6 +134,7 @@ void matrix_convolution_10_3(int picture[][10],
     {
         for(int j = 0; j < result_size; j++)
         {
+#ifdef X86
             int temp = 0;
             for(int k = 0; k < kernel_size; k++)
             {
@@ -133,6 +144,10 @@ void matrix_convolution_10_3(int picture[][10],
                 }
             }
             result[i][j] = temp;
+#endif // X86
+#ifdef RISCV
+            result[i][j] = matrix_CMAC_3_s(&picture[i][j], &kernel[0][0], 10 * SIZE_DATA);
+#endif // RISCV
         }
     }
     return;
