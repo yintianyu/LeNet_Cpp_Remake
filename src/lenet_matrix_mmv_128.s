@@ -64,7 +64,7 @@ loop:
 	addi   a4,a4,0x00
     lui    a5,0x0000
     addi   a5,a5,0x100
-    addi   x0,x0,0    #y.cmac x5, x14, x15, 64  t0 saves the temp result, t1 saves the aggregate
+    addi   x0,x0,0    #y.cmac x5, x14, x15, 64  #t0 saves the temp result, t1 saves the aggregate
     add    t1,t1,t0
 
     addi   a3,a3,-1

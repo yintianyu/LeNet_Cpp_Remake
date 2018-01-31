@@ -155,6 +155,15 @@ extern int matrix_CMAC_5_s(int *data, int *weight, int FeatureSize);
 extern int matrix_CMAC_3_s(int *data, int *weight, int FeatureSize);
 extern int matrix_MMV_256_s(int *data, int *weight);
 extern int matrix_MMV_128_s(int *data, int *weight);
+extern void matrix_convolution_28_5_s(int picture[][28],
+        int kernel[][5],
+        int result[][24]);
+extern void matrix_convolution_12_3_s(int picture[][12],
+        int kernel[][3],
+        int result[][10]);
+extern void matrix_convolution_10_3_s(int picture[][10],
+        int kernel[][3],
+        int result[][8]);
 #endif // RISCV
 
 #endif /* LENET_MATRIX_H_ */

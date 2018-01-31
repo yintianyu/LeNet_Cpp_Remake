@@ -66,6 +66,7 @@ void matrix_add_8(int dst[][8], int src[][8])
  *      2. 改为C风格(2018-1-9)
  *      3. 改为定点数(2018-1-10)
  */
+#ifdef X86
 void matrix_convolution_28_5(int picture[][28],
         int kernel[][5],
         int result[][24])
@@ -76,7 +77,6 @@ void matrix_convolution_28_5(int picture[][28],
     {
         for(int j = 0; j < result_size; j++)
         {
-#ifdef X86
             int temp = 0;
             for(int k = 0; k < kernel_size; k++)
             {
@@ -86,15 +86,17 @@ void matrix_convolution_28_5(int picture[][28],
                 }
             }
             result[i][j] = temp;
-#endif // X86
-#ifdef RISCV
-            result[i][j] = matrix_CMAC_5_s(&picture[i][j], &kernel[0][0], FEATURE_SIZE * SIZE_DATA);
-#endif
         }
     }
     return;
 }
+#endif // X86
 
+#ifdef RISCV
+
+#endif
+
+#ifdef X86
 void matrix_convolution_12_3(int picture[][12],
         int kernel[][3],
         int result[][10])
@@ -105,7 +107,6 @@ void matrix_convolution_12_3(int picture[][12],
     {
         for(int j = 0; j < result_size; j++)
         {
-#ifdef X86
             int temp = 0;
             for(int k = 0; k < kernel_size; k++)
             {
@@ -115,15 +116,13 @@ void matrix_convolution_12_3(int picture[][12],
                 }
             }
             result[i][j] = temp;
-#endif // X86
-#ifdef RISCV
-            result[i][j] = matrix_CMAC_3_s(&picture[i][j], &kernel[0][0], 12 * SIZE_DATA);
-#endif // RISCV
         }
     }
     return;
 }
+#endif // X86
 
+#ifdef X86
 void matrix_convolution_10_3(int picture[][10],
         int kernel[][3],
         int result[][8])
@@ -134,7 +133,6 @@ void matrix_convolution_10_3(int picture[][10],
     {
         for(int j = 0; j < result_size; j++)
         {
-#ifdef X86
             int temp = 0;
             for(int k = 0; k < kernel_size; k++)
             {
@@ -144,14 +142,12 @@ void matrix_convolution_10_3(int picture[][10],
                 }
             }
             result[i][j] = temp;
-#endif // X86
-#ifdef RISCV
-            result[i][j] = matrix_CMAC_3_s(&picture[i][j], &kernel[0][0], 10 * SIZE_DATA);
-#endif // RISCV
+
         }
     }
     return;
 }
+#endif // X86
 
 /*
  * 函数名称：matrix_multi_convolution
@@ -172,7 +168,12 @@ void matrix_multi_convolution_12_3(int pictures[][12][12],
     int temp[10][10];
     for(int i = 0; i < picture_number; i++)
     {
+#ifdef X86
         matrix_convolution_12_3(pictures[i], kernel[i], temp);
+#endif // X86
+#ifdef RISCV
+        matrix_convolution_12_3_s(pictures[i], kernel[i], temp);
+#endif
         matrix_add_10(aggregate, temp);
     }
     memcpy(result, aggregate, sizeof(int) * (picture_size - kernel_size + 1) * (picture_size - kernel_size + 1));
@@ -189,7 +190,12 @@ void matrix_multi_convolution_10_3(int pictures[][10][10],
     int temp[8][8];
     for(int i = 0; i < picture_number; i++)
     {
+#ifdef X86
         matrix_convolution_10_3(pictures[i], kernel[i], temp);
+#endif // X86
+#ifdef RISCV
+        matrix_convolution_10_3_s(pictures[i], kernel[i], temp);
+#endif
         matrix_add_8(aggregate, temp);
     }
     memcpy(result, aggregate, sizeof(int) * (picture_size - kernel_size + 1) * (picture_size - kernel_size + 1));

@@ -33,6 +33,17 @@ int cnn(int picture[FEATURE_SIZE][FEATURE_SIZE])
     forward_Conv_1(picture);
 #ifdef RISCV
     printf("Conv1 end.\n");
+#ifdef RISCV_DEBUG
+//    for (int i = 0; i < 24; i ++)
+//    {
+//        for(int j = 0; j < 24; j++)
+//        {
+//            printf("%x ", image1[0][i][j]);
+//        }
+//        printf("\n");
+//    }
+//    printf("\n\n\n\n");
+#endif
 #endif
     forward_Pooling_2();
 #ifdef RISCV
@@ -41,14 +52,47 @@ int cnn(int picture[FEATURE_SIZE][FEATURE_SIZE])
     forward_Conv_3();
 #ifdef RISCV
     printf("Conv3 end.\n");
+#ifdef RISCV_DEBUG
+    for (int i = 0; i < 10; i ++)
+    {
+        for(int j = 0; j < 10; j++)
+        {
+            printf("%x ", image3[0][i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n\n\n\n");
+#endif
 #endif
     forward_Conv_4();
 #ifdef RISCV
     printf("Conv4 end.\n");
+#ifdef RISCV_DEBUG
+    for (int i = 0; i < 8; i ++)
+    {
+        for(int j = 0; j < 8; j++)
+        {
+            printf("%x ", image4[0][i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n\n\n\n");
+#endif
 #endif
     forward_Pooling_5();
 #ifdef RISCV
     printf("Pooling5 end.\n");
+#ifdef RISCV_DEBUG
+    for (int i = 0; i < 4; i ++)
+    {
+        for(int j = 0; j < 4; j++)
+        {
+            printf("%x ", image5[0][i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n\n\n\n");
+#endif
 #endif
     forward_Flatten_6();
 #ifdef RISCV
@@ -57,6 +101,17 @@ int cnn(int picture[FEATURE_SIZE][FEATURE_SIZE])
     forward_Dense_7();
 #ifdef RISCV
     printf("Dense7 end.\n");
+#ifdef RISCV_DEBUG
+    for (int i = 0; i < 16; i ++)
+    {
+        for(int j = 0; j < 8; j++)
+        {
+            printf("%x ", image7[i * 8 + j]);
+        }
+        printf("\n");
+    }
+    printf("\n\n\n\n");
+#endif
 #endif
     return forward_Dense_8();
 }
@@ -76,7 +131,12 @@ void forward_Conv_1(int picture[][FEATURE_SIZE])
     for(int i = 0; i < CONV_1_OUTPUT_NUMBER; i++)
     {
         int temp[CONV_1_OUTPUT_SIZE][CONV_1_OUTPUT_SIZE];
+#ifdef X86
         matrix_convolution_28_5(picture, Conv_1.maps[i].W, temp);
+#endif // X86
+#ifdef RISCV
+        matrix_convolution_28_5_s(picture, Conv_1.maps[i].W, temp);
+#endif // RISCV
         matrix_matrice_tanh_24(temp, image1[i], Conv_1.bias[i]);
     }
 }
