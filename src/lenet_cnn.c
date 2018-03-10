@@ -17,22 +17,36 @@ struct dense8_layer Dense_8;
 
 
 /* Features of the layers*/
-int image1[CONV_1_OUTPUT_NUMBER][CONV_1_OUTPUT_SIZE][CONV_1_OUTPUT_SIZE];
-int image2[POOLING_2_OUTPUT_NUMBER][POOLING_2_OUTPUT_SIZE][POOLING_2_OUTPUT_SIZE];
-int image3[CONV_3_OUTPUT_NUMBER][CONV_3_OUTPUT_SIZE][CONV_3_OUTPUT_SIZE];
-int image4[CONV_4_OUTPUT_NUMBER][CONV_4_OUTPUT_SIZE][CONV_4_OUTPUT_SIZE];
-int image5[POOLING_5_OUTPUT_NUMBER][POOLING_5_OUTPUT_SIZE][POOLING_5_OUTPUT_SIZE];
-int image6[FLATTEN_6_OUTPUT_NUMBER];
-int image7[DENSE_7_OUTPUT_NUMBER];
-int image8[DENSE_8_OUTPUT_NUMBER];
-int cnn(int picture[FEATURE_SIZE][FEATURE_SIZE])
+dattp image1[CONV_1_OUTPUT_NUMBER][CONV_1_OUTPUT_SIZE][CONV_1_OUTPUT_SIZE];
+dattp image2[POOLING_2_OUTPUT_NUMBER][POOLING_2_OUTPUT_SIZE][POOLING_2_OUTPUT_SIZE];
+dattp image3[CONV_3_OUTPUT_NUMBER][CONV_3_OUTPUT_SIZE][CONV_3_OUTPUT_SIZE];
+dattp image4[CONV_4_OUTPUT_NUMBER][CONV_4_OUTPUT_SIZE][CONV_4_OUTPUT_SIZE];
+dattp image5[POOLING_5_OUTPUT_NUMBER][POOLING_5_OUTPUT_SIZE][POOLING_5_OUTPUT_SIZE];
+dattp image6[FLATTEN_6_OUTPUT_NUMBER];
+dattp image7[DENSE_7_OUTPUT_NUMBER];
+dattp image8[DENSE_8_OUTPUT_NUMBER];
+dattp cnn(dattp picture[FEATURE_SIZE][FEATURE_SIZE])
 {
 #ifdef RISCV
-    printf("In cnn.\n");
+    //printf("In cnn.\n");
 #endif
     forward_Conv_1(picture);
+#ifdef X86_DEBUG
+//    for (int i = 0; i < CONV_1_OUTPUT_NUMBER; i++)
+//    {
+//        for (int j = 0; j < CONV_1_OUTPUT_SIZE; j++)
+//        {
+//            for (int k = 0; k < CONV_1_OUTPUT_SIZE; k++)
+//            {
+//                printf("%f ", ((float)image1[i][j][k]) / 4096);
+//            }
+//            printf("\n");
+//        }
+//        printf("************************************************\n\n");
+//    }
+#endif
 #ifdef RISCV
-    printf("Conv1 end.\n");
+    //printf("Conv1 end.\n");
 #ifdef RISCV_DEBUG
 //    for (int i = 0; i < 24; i ++)
 //    {
@@ -47,11 +61,25 @@ int cnn(int picture[FEATURE_SIZE][FEATURE_SIZE])
 #endif
     forward_Pooling_2();
 #ifdef RISCV
-    printf("Pooling2 end.\n");
+    //printf("Pooling2 end.\n");
 #endif
     forward_Conv_3();
+#ifdef X86_DEBUG
+//    for (int i = 0; i < CONV_3_OUTPUT_NUMBER; i++)
+//    {
+//        for (int j = 0; j < CONV_3_OUTPUT_SIZE; j++)
+//        {
+//            for (int k = 0; k < CONV_3_OUTPUT_SIZE; k++)
+//            {
+//                printf("%f ", ((float)image3[i][j][k]) / 4096);
+//            }
+//            printf("\n");
+//        }
+//        printf("************************************************\n\n");
+//    }
+#endif
 #ifdef RISCV
-    printf("Conv3 end.\n");
+    //printf("Conv3 end.\n");
 #ifdef RISCV_DEBUG
     for (int i = 0; i < 10; i ++)
     {
@@ -65,8 +93,22 @@ int cnn(int picture[FEATURE_SIZE][FEATURE_SIZE])
 #endif
 #endif
     forward_Conv_4();
+#ifdef X86_DEBUG
+//    for (int i = 0; i < CONV_4_OUTPUT_NUMBER; i++)
+//    {
+//        for (int j = 0; j < CONV_4_OUTPUT_SIZE; j++)
+//        {
+//            for (int k = 0; k < CONV_4_OUTPUT_SIZE; k++)
+//            {
+//                printf("%f ", ((float)image4[i][j][k]) / 4096);
+//            }
+//            printf("\n");
+//        }
+//        printf("************************************************\n\n");
+//    }
+#endif
 #ifdef RISCV
-    printf("Conv4 end.\n");
+    //printf("Conv4 end.\n");
 #ifdef RISCV_DEBUG
     for (int i = 0; i < 8; i ++)
     {
@@ -81,7 +123,7 @@ int cnn(int picture[FEATURE_SIZE][FEATURE_SIZE])
 #endif
     forward_Pooling_5();
 #ifdef RISCV
-    printf("Pooling5 end.\n");
+    //printf("Pooling5 end.\n");
 #ifdef RISCV_DEBUG
     for (int i = 0; i < 4; i ++)
     {
@@ -96,11 +138,22 @@ int cnn(int picture[FEATURE_SIZE][FEATURE_SIZE])
 #endif
     forward_Flatten_6();
 #ifdef RISCV
-    printf("Flatten6 end.\n");
+    //printf("Flatten6 end.\n");
 #endif
     forward_Dense_7();
+#ifdef X86_DEBUG
+    for(int i = 0; i < 16; i++)
+    {
+        for(int j = 0; j < 8; j++)
+        {
+            printf("%f ", ((float)image7[i * 8 + j]) / 4096);
+        }
+        printf("\n");
+    }
+    printf("*************************************************\n");
+#endif
 #ifdef RISCV
-    printf("Dense7 end.\n");
+    //printf("Dense7 end.\n");
 #ifdef RISCV_DEBUG
     for (int i = 0; i < 16; i ++)
     {
@@ -113,7 +166,16 @@ int cnn(int picture[FEATURE_SIZE][FEATURE_SIZE])
     printf("\n\n\n\n");
 #endif
 #endif
-    return forward_Dense_8();
+    dattp temp = forward_Dense_8();
+#ifdef X86_DEBUG
+    for(int i = 0; i < 10; i++)
+    {
+        printf("%f ", ((float)image8[i]) / 4096);
+        printf("\n");
+    }
+    printf("*************************************************\n");
+#endif
+    return temp;
 }
 
 
@@ -126,15 +188,15 @@ int cnn(int picture[FEATURE_SIZE][FEATURE_SIZE])
  *      1. 创建新函数(2018-1-6)
  *      2. 改为定点数(2018-1-10)
  */
-void forward_Conv_1(int picture[][FEATURE_SIZE])
+void forward_Conv_1(dattp picture[][FEATURE_SIZE])
 {
     for(int i = 0; i < CONV_1_OUTPUT_NUMBER; i++)
     {
-        int temp[CONV_1_OUTPUT_SIZE][CONV_1_OUTPUT_SIZE];
-#ifdef X86
+        dattp temp[CONV_1_OUTPUT_SIZE][CONV_1_OUTPUT_SIZE];
+#if (defined X86) || (defined RISCV)
         matrix_convolution_28_5(picture, Conv_1.maps[i].W, temp);
-#endif // X86
-#ifdef RISCV
+#endif // X86 || RISCV
+#ifdef RISCV_DEBUG
         matrix_convolution_28_5_s(picture, Conv_1.maps[i].W, temp);
 #endif // RISCV
         matrix_matrice_tanh_24(temp, image1[i], Conv_1.bias[i]);
@@ -171,11 +233,11 @@ void forward_Conv_3()
 {
     for(int i = 0; i < CONV_3_OUTPUT_NUMBER; i++)
     {
-        int temp[CONV_3_OUTPUT_SIZE][CONV_3_OUTPUT_SIZE];
-        int weight_part[POOLING_2_OUTPUT_NUMBER][CONV_3_KERNEL_SIZE][CONV_3_KERNEL_SIZE];
+        dattp temp[CONV_3_OUTPUT_SIZE][CONV_3_OUTPUT_SIZE];
+        dattp weight_part[POOLING_2_OUTPUT_NUMBER][CONV_3_KERNEL_SIZE][CONV_3_KERNEL_SIZE];
         for (int j = 0; j < POOLING_2_OUTPUT_NUMBER; j++)
         {
-            memcpy(weight_part[j], Conv_3.maps[i * POOLING_2_OUTPUT_NUMBER + j].W, sizeof(int) * CONV_3_KERNEL_SIZE * CONV_3_KERNEL_SIZE);
+            memcpy(weight_part[j], Conv_3.maps[i * POOLING_2_OUTPUT_NUMBER + j].W, sizeof(dattp) * CONV_3_KERNEL_SIZE * CONV_3_KERNEL_SIZE);
         }
         matrix_multi_convolution_12_3(image2, weight_part, temp);
         matrix_matrice_tanh_10(temp, image3[i], Conv_3.bias[i]);
@@ -196,11 +258,11 @@ void forward_Conv_4()
 {
     for(int i = 0; i < CONV_4_OUTPUT_NUMBER; i++)
     {
-        int temp[CONV_4_OUTPUT_SIZE][CONV_4_OUTPUT_SIZE];
-        int weight_part[CONV_3_OUTPUT_NUMBER][CONV_4_KERNEL_SIZE][CONV_4_KERNEL_SIZE];
+        dattp temp[CONV_4_OUTPUT_SIZE][CONV_4_OUTPUT_SIZE];
+        dattp weight_part[CONV_3_OUTPUT_NUMBER][CONV_4_KERNEL_SIZE][CONV_4_KERNEL_SIZE];
         for (int j = 0; j < CONV_3_OUTPUT_NUMBER; j++)
         {
-            memcpy(weight_part[j], Conv_4.maps[i * CONV_3_OUTPUT_NUMBER + j].W, sizeof(int) * CONV_4_KERNEL_SIZE * CONV_4_KERNEL_SIZE);
+            memcpy(weight_part[j], Conv_4.maps[i * CONV_3_OUTPUT_NUMBER + j].W, sizeof(dattp) * CONV_4_KERNEL_SIZE * CONV_4_KERNEL_SIZE);
         }
         matrix_multi_convolution_10_3(image3, weight_part, temp);
         matrix_matrice_tanh_8(temp, image4[i], Conv_4.bias[i]);
@@ -261,7 +323,7 @@ void forward_Flatten_6()
  */
 void forward_Dense_7()
 {
-    int temp[DENSE_7_OUTPUT_NUMBER];
+    dattp temp[DENSE_7_OUTPUT_NUMBER];
     matrix_MMV_256_128(image6, Dense_7.W, temp);
     matrix_vector_tanh_128(temp, image7, Dense_7.bias);
 }
@@ -275,9 +337,9 @@ void forward_Dense_7()
  *      1. 创建新函数(2018-1-6)
  *      2. 把softmax的输入从image7改为temp(2018-1-8)
  */
-int forward_Dense_8()
+dattp forward_Dense_8()
 {
-    int temp[DENSE_8_OUTPUT_NUMBER];
+    dattp temp[DENSE_8_OUTPUT_NUMBER];
     matrix_MMV_128_10(image7, Dense_8.W, temp);
     return matrix_softmax_10(temp, image8, Dense_7.bias);
 }

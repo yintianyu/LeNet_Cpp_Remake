@@ -8,7 +8,7 @@
 #ifndef LENET_DEFINE_H_
 #define LENET_DEFINE_H_
 #include <stdio.h>
-#ifdef RISCV
+#if (defined RISCV) || (defined RISCV_DLA)
 #include "sc_print.h"
 #define printf sc_printf
 #endif
@@ -16,7 +16,7 @@
 #define BATCH_SIZE 20
 #define LOOP_TIME 500
 #endif // X86
-#ifdef RISCV
+#if (defined RISCV) || (defined RISCV_DLA)
 #define BATCH_SIZE (5)
 #define LOOP_TIME (1)
 #endif // RISCV
@@ -24,8 +24,10 @@
 #define RESULT_SORT 10
 #define UPDATE_NUMBER 20
 
-#define FLOATPOINT (12) //整数>>12后为小数
-#define MULFACTOR   (4096)  // 2 ^ 12 = 4096
+typedef int dattp;
+typedef int ldattp;  // long data type used on temp result of multiply
+#define FLOATPOINT (12) //整数>>10后为小数
+#define MULFACTOR   (4096)  // 2 ^ 10 = 1024
 
 
 //层的参数
@@ -68,7 +70,7 @@ typedef enum{
     UPDATE
 }cnn_status;
 
-#ifdef RISCV
+#if (defined RISCV) || (defined RISCV_DLA)
 #define SIZE_DATA (4)
 #define SIZE_FEATURE (SIZE_DATA * FEATURE_SIZE * FEATURE_SIZE) //The number of bytes in each feature
 #define SIZE_LABEL (1)
@@ -89,8 +91,8 @@ typedef enum{
 #define BIAS_MNIST_LABEL (BIAS_MNIST_FEATURE + SIZE_FEATURE * 5)
 
 //Memeory Address
-#define ADDRESS_USER_START (0x80000)
-#define ADDRESS_MNIST_START (0xa31b8)
+#define ADDRESS_USER_START (0xF0000000)
+#define ADDRESS_MNIST_START (0xf00231b8)
 #define ADDRESS_CONV1_WEIGHT (ADDRESS_USER_START + BIAS_CONV1_WEIGHT)
 #define ADDRESS_CONV1_BIAS (ADDRESS_USER_START + BIAS_CONV1_BIAS)
 #define ADDRESS_CONV3_WEIGHT (ADDRESS_USER_START + BIAS_CONV3_WEIGHT)

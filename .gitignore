@@ -9,3 +9,5 @@ Debug/src/lenet_cnn.o
 *.exe
 *.xml
 *.o
+*.txt
+*.txt

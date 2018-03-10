@@ -13,10 +13,13 @@
 
 
 int main() {
-    int feature[BATCH_SIZE][FEATURE_SIZE][FEATURE_SIZE] = {0};
+    dattp feature[BATCH_SIZE][FEATURE_SIZE][FEATURE_SIZE] = {0};
     unsigned char Mnist_Label[BATCH_SIZE] = {0};
     int correct_count = 0;
     int read_status;
+#ifdef RISCV
+    printf("Let's Start!\n");
+#endif
     read_status = read_data();
 #ifdef RISCV
     printf("Read Data Finished.\n");
@@ -28,8 +31,8 @@ int main() {
     }
     for(int t = 0; t < LOOP_TIME; t++)
     {
-        int reference;
-        int answer;
+        dattp reference;
+        dattp answer;
         read_status = read_Mnist(t * BATCH_SIZE, (t + 1) * BATCH_SIZE, feature, Mnist_Label);
 #ifdef RISCV
         printf("Read Mnist Finished.\n");

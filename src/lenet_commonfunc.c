@@ -11,7 +11,7 @@
 
 
 #ifdef X86
-int read_Mnist(int begin_number, int end_number, int Feature[][FEATURE_SIZE][FEATURE_SIZE], unsigned char label[])
+int read_Mnist(int begin_number, int end_number, dattp Feature[][FEATURE_SIZE][FEATURE_SIZE], unsigned char label[])
 {
     FILE *fp;
     char imagefile[] = ".\\data\\t10k-images.idx3-ubyte";
@@ -31,7 +31,7 @@ int read_Mnist(int begin_number, int end_number, int Feature[][FEATURE_SIZE][FEA
             fread(picture[j], sizeof(unsigned char), FEATURE_SIZE, fp);
             for(int k = 0; k < FEATURE_SIZE; k++)
             {
-                Feature[i][j][k] = (int)(((float)picture[j][k] / 255) * MULFACTOR);
+                Feature[i][j][k] = (dattp)(((float)picture[j][k] / 255) * MULFACTOR);
             }
         }
     }
@@ -47,7 +47,7 @@ int read_Mnist(int begin_number, int end_number, int Feature[][FEATURE_SIZE][FEA
     for(int i = 0;i < end_number - begin_number; i++)
     {
         fread(&lab, sizeof(unsigned char), 1, fp);
-        label[i] = (int)lab;
+        label[i] = (dattp)lab;
     }
     fclose(fp);
     return 0;
@@ -81,10 +81,10 @@ int read_data()
             for(int k = 0; k < CONV_1_KERNEL_SIZE; k++)
             {
                 float temp;
-                int tempint;
+                dattp tempint;
                 fread(&temp, 1, sizeof(float), fp);
-                tempint = (int)(temp * MULFACTOR);
-                memcpy(&Conv_1.maps[i].W[j][k], &tempint, sizeof(int));
+                tempint = (dattp)(temp * MULFACTOR);
+                memcpy(&Conv_1.maps[i].W[j][k], &tempint, sizeof(dattp));
             }
         }
     }
@@ -100,10 +100,10 @@ int read_data()
     for(int i = 0; i < CONV_1_OUTPUT_NUMBER; i++)
     {
         float temp;
-        int tempint;
+        dattp tempint;
         fread(&temp, 1, sizeof(float), fp);
-        tempint = (int)(temp * MULFACTOR);
-        memcpy(&Conv_1.bias[i], &tempint, sizeof(int));
+        tempint = (dattp)(temp * MULFACTOR);
+        memcpy(&Conv_1.bias[i], &tempint, sizeof(dattp));
     }
     fclose(fp);
     /*结束读一个文件*/
@@ -122,10 +122,10 @@ int read_data()
             for(int k = 0; k < CONV_3_KERNEL_SIZE; k++)
             {
                 float temp;
-                int tempint;
+                dattp tempint;
                 fread(&temp, 1, sizeof(float), fp);
-                tempint = (int)(temp * MULFACTOR);
-                memcpy(&Conv_3.maps[i].W[j][k], &tempint, sizeof(int));
+                tempint = (dattp)(temp * MULFACTOR);
+                memcpy(&Conv_3.maps[i].W[j][k], &tempint, sizeof(dattp));
             }
         }
     }
@@ -141,10 +141,10 @@ int read_data()
     for(int i = 0; i < CONV_3_OUTPUT_NUMBER; i++)
     {
         float temp;
-        int tempint;
+        dattp tempint;
         fread(&temp, 1, sizeof(float), fp);
-        tempint = (int)(temp * MULFACTOR);
-        memcpy(&Conv_3.bias[i], &tempint, sizeof(int));
+        tempint = (dattp)(temp * MULFACTOR);
+        memcpy(&Conv_3.bias[i], &tempint, sizeof(dattp));
     }
     fclose(fp);
     /*结束读一个文件*/
@@ -163,10 +163,10 @@ int read_data()
             for(int k = 0; k < CONV_4_KERNEL_SIZE; k++)
             {
                 float temp;
-                int tempint;
+                dattp tempint;
                 fread(&temp, 1, sizeof(float), fp);
-                tempint = (int)(temp * MULFACTOR);
-                memcpy(&Conv_4.maps[i].W[j][k], &tempint, sizeof(int));
+                tempint = (dattp)(temp * MULFACTOR);
+                memcpy(&Conv_4.maps[i].W[j][k], &tempint, sizeof(dattp));
             }
         }
     }
@@ -182,10 +182,10 @@ int read_data()
     for(int i = 0; i < CONV_4_OUTPUT_NUMBER; i++)
     {
         float temp;
-        int tempint;
+        dattp tempint;
         fread(&temp, 1, sizeof(float), fp);
-        tempint = (int)(temp * MULFACTOR);
-        memcpy(&Conv_4.bias[i], &tempint, sizeof(int));
+        tempint = (dattp)(temp * MULFACTOR);
+        memcpy(&Conv_4.bias[i], &tempint, sizeof(dattp));
     }
     fclose(fp);
     /*结束读一个文件*/
@@ -201,10 +201,10 @@ int read_data()
         for(int j = 0; j < DENSE_7_INPUT_NUMBER; j++)
         {
             float temp;
-            int tempint;
+            dattp tempint;
             fread(&temp, 1, sizeof(float), fp);
-            tempint = (int)(temp * MULFACTOR);
-            memcpy(&Dense_7.W[i][j], &tempint, sizeof(int));
+            tempint = (dattp)(temp * MULFACTOR);
+            memcpy(&Dense_7.W[i][j], &tempint, sizeof(dattp));
         }
     }
     fclose(fp);
@@ -219,10 +219,10 @@ int read_data()
     for(int i = 0; i < DENSE_7_OUTPUT_NUMBER; i++)
     {
         float temp;
-        int tempint;
+        dattp tempint;
         fread(&temp, 1, sizeof(float), fp);
-        tempint = (int)(temp * MULFACTOR);
-        memcpy(&Dense_7.bias[i], &tempint, sizeof(int));
+        tempint = (dattp)(temp * MULFACTOR);
+        memcpy(&Dense_7.bias[i], &tempint, sizeof(dattp));
     }
     fclose(fp);
     /*结束读一个文件*/
@@ -238,10 +238,10 @@ int read_data()
         for(int j = 0; j < DENSE_8_INPUT_NUMBER; j++)
         {
             float temp;
-            int tempint;
+            dattp tempint;
             fread(&temp, 1, sizeof(float), fp);
-            tempint = (int)(temp * MULFACTOR);
-            memcpy(&Dense_8.W[i][j], &tempint, sizeof(int));
+            tempint = (dattp)(temp * MULFACTOR);
+            memcpy(&Dense_8.W[i][j], &tempint, sizeof(dattp));
         }
     }
     fclose(fp);
@@ -256,10 +256,10 @@ int read_data()
     for(int i = 0; i < DENSE_8_OUTPUT_NUMBER; i++)
     {
         float temp;
-        int tempint;
+        dattp tempint;
         fread(&temp, 1, sizeof(float), fp);
-        tempint = (int)(temp * MULFACTOR);
-        memcpy(&Dense_8.bias[i], &tempint, sizeof(int));
+        tempint = (dattp)(temp * MULFACTOR);
+        memcpy(&Dense_8.bias[i], &tempint, sizeof(dattp));
     }
     fclose(fp);
     /*结束读一个文件*/
@@ -269,7 +269,7 @@ int read_data()
 #endif
 
 #ifdef RISCV
-int read_Mnist(int begin_number, int end_number, int Feature[][FEATURE_SIZE][FEATURE_SIZE], unsigned char label[])
+int read_Mnist(int begin_number, int end_number, dattp Feature[][FEATURE_SIZE][FEATURE_SIZE], unsigned char label[])
 {
     void *pstFeatureStart = (void*)(ADDRESS_MNIST_FEATURE + FEATURE_SIZE * FEATURE_SIZE * begin_number);
     memcpy(Feature, pstFeatureStart, SIZE_FEATURE * (end_number - begin_number));

@@ -21,11 +21,11 @@
  *      2. 由dst+=dst+src;改为dst=dst+src;(2018-1-8)
  *      3. 改为C风格(2018-1-9)
  */
-void matrix_add_24(int dst[][24], int src[][24]);
+void matrix_add_24(dattp dst[][24], dattp src[][24]);
 
-void matrix_add_10(int dst[][10], int src[][10]);
+void matrix_add_10(dattp dst[][10], dattp src[][10]);
 
-void matrix_add_8(int dst[][8], int src[][8]);
+void matrix_add_8(dattp dst[][8], dattp src[][8]);
 
 
 /*
@@ -37,18 +37,18 @@ void matrix_add_8(int dst[][8], int src[][8]);
  *      1. 创建新函数(2018-1-6)
  *      2. 改为C风格(2018-1-9)
  */
-void matrix_convolution_28_5(int picture[][28],
-        int kernel[][5],
-        int result[][24]);
+void matrix_convolution_28_5(dattp picture[][28],
+        dattp kernel[][5],
+        dattp result[][24]);
 
 
-void matrix_convolution_12_3(int picture[][12],
-        int kernel[][3],
-        int result[][10]);
+void matrix_convolution_12_3(dattp picture[][12],
+        dattp kernel[][3],
+        dattp result[][10]);
 
-void matrix_convolution_10_3(int picture[][10],
-        int kernel[][3],
-        int result[][8]);
+void matrix_convolution_10_3(dattp picture[][10],
+        dattp kernel[][3],
+        dattp result[][8]);
 
 /*
  * 函数名称：matrix_multi_convolution
@@ -58,13 +58,13 @@ void matrix_convolution_10_3(int picture[][10],
  * 修改记录：
  *      1. 创建新函数(2018-1-6)
  */
-void matrix_multi_convolution_12_3(int pictures[][12][12],
-        int kernel[][3][3],
-        int result[10][10]);
+void matrix_multi_convolution_12_3(dattp pictures[][12][12],
+        dattp kernel[][3][3],
+        dattp result[10][10]);
 
-void matrix_multi_convolution_10_3(int pictures[][10][10],
-        int kernel[][3][3],
-        int result[8][8]);
+void matrix_multi_convolution_10_3(dattp pictures[][10][10],
+        dattp kernel[][3][3],
+        dattp result[8][8]);
 
 /*
  * 函数名称：matrix_matrice_tanh
@@ -75,14 +75,14 @@ void matrix_multi_convolution_10_3(int pictures[][10][10],
  *      1. 创建新函数(2018-1-6)
  *      2. 改为C风格(2018-1-9)
  */
-void matrix_matrice_tanh_24(int input[][24],
-        int output[][24], int bias);
+void matrix_matrice_tanh_24(dattp input[][24],
+        dattp output[][24], dattp bias);
 
-void matrix_matrice_tanh_10(int input[][10],
-        int output[][10], int bias);
+void matrix_matrice_tanh_10(dattp input[][10],
+        dattp output[][10], dattp bias);
 
-void matrix_matrice_tanh_8(int input[][8],
-        int output[][8], int bias);
+void matrix_matrice_tanh_8(dattp input[][8],
+        dattp output[][8], dattp bias);
 
 /*
  * 函数名称：matrix_vector_tanh
@@ -94,9 +94,9 @@ void matrix_matrice_tanh_8(int input[][8],
  *      2. 把output[size] = ...改为output[i] = ...(2018-1-8)
  *      3. 改为C风格(2018-1-9)
  */
-void matrix_vector_tanh_128(int input[128],
-        int output[128],
-        int bias[128]);
+void matrix_vector_tanh_128(dattp input[128],
+        dattp output[128],
+        dattp bias[128]);
 
 /*
  * 函数名称：matrix_softmax
@@ -108,9 +108,9 @@ void matrix_vector_tanh_128(int input[128],
  *      2. 增加了softmax计算结果的输出(2018-1-8)
  *      3. 改为C风格(2018-1-9)
  */
-int matrix_softmax_10(int input[10],
-        int output[10],
-        int bias[10]);
+dattp matrix_softmax_10(dattp input[10],
+        dattp output[10],
+        dattp bias[10]);
 
 
 
@@ -123,9 +123,9 @@ int matrix_softmax_10(int input[10],
  *      1. 创建新函数(2018-1-6)
  *      3. 改为C风格(2018-1-9)
  */
-void matrix_pooling_24(int input[24][24], int output[12][12]);
+void matrix_pooling_24(dattp input[24][24], dattp output[12][12]);
 
-void matrix_pooling_8(int input[8][8], int output[4][4]);
+void matrix_pooling_8(dattp input[8][8], dattp output[4][4]);
 
 /*
  * 函数名称：matrix_MMV
@@ -136,9 +136,9 @@ void matrix_pooling_8(int input[8][8], int output[4][4]);
  *      1. 创建新函数(2018-1-6)
  *      2. temp的类型由int改为float
  */
-void matrix_MMV_256_128(int x[256], int weight[128][256], int output[128]);
+void matrix_MMV_256_128(dattp x[256], dattp weight[128][256], dattp output[128]);
 
-void matrix_MMV_128_10(int x[128], int weight[10][128], int output[10]);
+void matrix_MMV_128_10(dattp x[128], dattp weight[10][128], dattp output[10]);
 
 
 /*
@@ -150,20 +150,20 @@ void matrix_MMV_128_10(int x[128], int weight[10][128], int output[10]);
  *      1. 创建新函数(2018-1-6)
  *      2. temp的类型由int改为float
  */
-#ifdef RISCV
-extern int matrix_CMAC_5_s(int *data, int *weight, int FeatureSize);
-extern int matrix_CMAC_3_s(int *data, int *weight, int FeatureSize);
-extern int matrix_MMV_256_s(int *data, int *weight);
-extern int matrix_MMV_128_s(int *data, int *weight);
-extern void matrix_convolution_28_5_s(int picture[][28],
-        int kernel[][5],
-        int result[][24]);
-extern void matrix_convolution_12_3_s(int picture[][12],
-        int kernel[][3],
-        int result[][10]);
-extern void matrix_convolution_10_3_s(int picture[][10],
-        int kernel[][3],
-        int result[][8]);
-#endif // RISCV
+#ifdef RISCV_DLA
+extern dattp matrix_CMAC_5_s(dattp *data, dattp *weight, dattp FeatureSize);
+extern dattp matrix_CMAC_3_s(dattp *data, dattp *weight, dattp FeatureSize);
+extern dattp matrix_MMV_256_s(dattp *data, dattp *weight);
+extern dattp matrix_MMV_128_s(dattp *data, dattp *weight);
+extern void matrix_convolution_28_5_s(dattp picture[][28],
+        dattp kernel[][5],
+        dattp result[][24]);
+extern void matrix_convolution_12_3_s(dattp picture[][12],
+        dattp kernel[][3],
+        dattp result[][10]);
+extern void matrix_convolution_10_3_s(dattp picture[][10],
+        dattp kernel[][3],
+        dattp result[][8]);
+#endif // RISCV_DLA
 
 #endif /* LENET_MATRIX_H_ */

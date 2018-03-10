@@ -8,8 +8,9 @@
 #ifndef LENET_MATH_H_
 #define LENET_MATH_H_
 #include <stdio.h>
-int math_tanh(int x);
-int math_exp(int x);
+#include "lenet_define.h"
+dattp math_tanh(dattp x);
+dattp math_exp(dattp x);
 
 
 

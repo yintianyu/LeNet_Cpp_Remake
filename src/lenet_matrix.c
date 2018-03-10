@@ -23,7 +23,7 @@
  *      3. 改为C风格(2018-1-9)
  *      4. 改为定点数(2018-1-10)
  */
-void matrix_add_24(int dst[][24], int src[][24])
+void matrix_add_24(dattp dst[][24], dattp src[][24])
 {
     for(int i = 0; i < 24; i++)
     {
@@ -34,7 +34,7 @@ void matrix_add_24(int dst[][24], int src[][24])
     }
 }
 
-void matrix_add_10(int dst[][10], int src[][10])
+void matrix_add_10(dattp dst[][10], dattp src[][10])
 {
     for(int i = 0; i < 10; i++)
     {
@@ -45,7 +45,7 @@ void matrix_add_10(int dst[][10], int src[][10])
     }
 }
 
-void matrix_add_8(int dst[][8], int src[][8])
+void matrix_add_8(dattp dst[][8], dattp src[][8])
 {
     for(int i = 0; i < 8; i++)
     {
@@ -66,10 +66,10 @@ void matrix_add_8(int dst[][8], int src[][8])
  *      2. 改为C风格(2018-1-9)
  *      3. 改为定点数(2018-1-10)
  */
-#ifdef X86
-void matrix_convolution_28_5(int picture[][28],
-        int kernel[][5],
-        int result[][24])
+#if (defined X86) || (defined RISCV)
+void matrix_convolution_28_5(dattp picture[][28],
+        dattp kernel[][5],
+        dattp result[][24])
 {
     int result_size = 24;
     int kernel_size = 5;
@@ -77,12 +77,12 @@ void matrix_convolution_28_5(int picture[][28],
     {
         for(int j = 0; j < result_size; j++)
         {
-            int temp = 0;
+            dattp temp = 0;
             for(int k = 0; k < kernel_size; k++)
             {
                 for(int l = 0; l < kernel_size; l++)
                 {
-                    temp += picture[i + k][j + l] * kernel[k][l] >> FLOATPOINT;
+                    temp += ((ldattp)picture[i + k][j + l] * (ldattp)kernel[k][l]) >> FLOATPOINT;
                 }
             }
             result[i][j] = temp;
@@ -96,10 +96,10 @@ void matrix_convolution_28_5(int picture[][28],
 
 #endif
 
-#ifdef X86
-void matrix_convolution_12_3(int picture[][12],
-        int kernel[][3],
-        int result[][10])
+#if (defined X86) || (defined RISCV)
+void matrix_convolution_12_3(dattp picture[][12],
+        dattp kernel[][3],
+        dattp result[][10])
 {
     int result_size = 10;
     int kernel_size = 3;
@@ -107,12 +107,12 @@ void matrix_convolution_12_3(int picture[][12],
     {
         for(int j = 0; j < result_size; j++)
         {
-            int temp = 0;
+            dattp temp = 0;
             for(int k = 0; k < kernel_size; k++)
             {
                 for(int l = 0; l < kernel_size; l++)
                 {
-                    temp += picture[i + k][j + l] * kernel[k][l] >> FLOATPOINT;
+                    temp += ((ldattp)picture[i + k][j + l] * (ldattp)kernel[k][l]) >> FLOATPOINT;
                 }
             }
             result[i][j] = temp;
@@ -122,10 +122,10 @@ void matrix_convolution_12_3(int picture[][12],
 }
 #endif // X86
 
-#ifdef X86
-void matrix_convolution_10_3(int picture[][10],
-        int kernel[][3],
-        int result[][8])
+#if (defined X86) || (defined RISCV)
+void matrix_convolution_10_3(dattp picture[][10],
+        dattp kernel[][3],
+        dattp result[][8])
 {
     int result_size = 8;
     int kernel_size = 3;
@@ -133,12 +133,12 @@ void matrix_convolution_10_3(int picture[][10],
     {
         for(int j = 0; j < result_size; j++)
         {
-            int temp = 0;
+            dattp temp = 0;
             for(int k = 0; k < kernel_size; k++)
             {
                 for(int l = 0; l < kernel_size; l++)
                 {
-                    temp += picture[i + k][j + l] * kernel[k][l] >> FLOATPOINT;
+                    temp += ((ldattp)picture[i + k][j + l] * (ldattp)kernel[k][l]) >> FLOATPOINT;
                 }
             }
             result[i][j] = temp;
@@ -157,48 +157,48 @@ void matrix_convolution_10_3(int picture[][10],
  * 修改记录：
  *      1. 创建新函数(2018-1-6)
  */
-void matrix_multi_convolution_12_3(int pictures[][12][12],
-        int kernel[][3][3],
-        int result[10][10])
+void matrix_multi_convolution_12_3(dattp pictures[][12][12],
+        dattp kernel[][3][3],
+        dattp result[10][10])
 {
     int picture_size=12;
     int kernel_size = 3;
     int picture_number = 6;
-    int aggregate[10][10] = {0};
-    int temp[10][10];
+    dattp aggregate[10][10] = {0};
+    dattp temp[10][10];
     for(int i = 0; i < picture_number; i++)
     {
-#ifdef X86
+#if (defined X86) || (defined RISCV)
         matrix_convolution_12_3(pictures[i], kernel[i], temp);
 #endif // X86
-#ifdef RISCV
+#ifdef RISCV_DLA
         matrix_convolution_12_3_s(pictures[i], kernel[i], temp);
 #endif
         matrix_add_10(aggregate, temp);
     }
-    memcpy(result, aggregate, sizeof(int) * (picture_size - kernel_size + 1) * (picture_size - kernel_size + 1));
+    memcpy(result, aggregate, sizeof(dattp) * (picture_size - kernel_size + 1) * (picture_size - kernel_size + 1));
 }
 
-void matrix_multi_convolution_10_3(int pictures[][10][10],
-        int kernel[][3][3],
-        int result[8][8])
+void matrix_multi_convolution_10_3(dattp pictures[][10][10],
+        dattp kernel[][3][3],
+        dattp result[8][8])
 {
     int picture_size=10;
     int kernel_size = 3;
     int picture_number = 8;
-    int aggregate[8][8] = {0};
-    int temp[8][8];
+    dattp aggregate[8][8] = {0};
+    dattp temp[8][8];
     for(int i = 0; i < picture_number; i++)
     {
-#ifdef X86
+#if (defined X86) || (defined RISCV)
         matrix_convolution_10_3(pictures[i], kernel[i], temp);
 #endif // X86
-#ifdef RISCV
+#ifdef RISCV_DLA
         matrix_convolution_10_3_s(pictures[i], kernel[i], temp);
 #endif
         matrix_add_8(aggregate, temp);
     }
-    memcpy(result, aggregate, sizeof(int) * (picture_size - kernel_size + 1) * (picture_size - kernel_size + 1));
+    memcpy(result, aggregate, sizeof(dattp) * (picture_size - kernel_size + 1) * (picture_size - kernel_size + 1));
 }
 
 /*
@@ -210,8 +210,8 @@ void matrix_multi_convolution_10_3(int pictures[][10][10],
  *      1. 创建新函数(2018-1-6)
  *      2. 改为C风格(2018-1-9)
  */
-void matrix_matrice_tanh_24(int input[][24],
-        int output[][24], int bias)
+void matrix_matrice_tanh_24(dattp input[][24],
+        dattp output[][24], dattp bias)
 {
     int size = 24;
     for(int i = 0; i < size; i++)
@@ -224,8 +224,8 @@ void matrix_matrice_tanh_24(int input[][24],
     return;
 }
 
-void matrix_matrice_tanh_10(int input[][10],
-        int output[][10], int bias)
+void matrix_matrice_tanh_10(dattp input[][10],
+        dattp output[][10], dattp bias)
 {
     int size = 10;
     for(int i = 0; i < size; i++)
@@ -238,8 +238,8 @@ void matrix_matrice_tanh_10(int input[][10],
     return;
 }
 
-void matrix_matrice_tanh_8(int input[][8],
-        int output[][8], int bias)
+void matrix_matrice_tanh_8(dattp input[][8],
+        dattp output[][8], dattp bias)
 {
     int size = 8;
     for(int i = 0; i < size; i++)
@@ -261,14 +261,14 @@ void matrix_matrice_tanh_8(int input[][8],
  *      2. 把output[size] = ...改为output[i] = ...(2018-1-8)
  *      3. 改为C风格(2018-1-9)
  */
-void matrix_vector_tanh_128(int input[128],
-        int output[128],
-        int bias[128])
+void matrix_vector_tanh_128(dattp input[128],
+        dattp output[128],
+        dattp bias[128])
 {
     int size = 128;
     for(int i = 0; i < size; i++)
     {
-        int temp = input[i] + bias[i];
+        dattp temp = input[i] + bias[i];
         output[i] = math_tanh(temp);
     }
     return;
@@ -285,20 +285,20 @@ void matrix_vector_tanh_128(int input[128],
  *      2. 增加了softmax计算结果的输出(2018-1-8)
  *      3. 改为C风格(2018-1-9)
  */
-int matrix_softmax_10(int input[10],
-        int output[10],
-        int bias[10])
+dattp matrix_softmax_10(dattp input[10],
+        dattp output[10],
+        dattp bias[10])
 {
     int inputsize = 10;
-    int temp = 0;
-    int index = 0;
+    dattp temp = 0;
+    dattp index = 0;
     for(int i = 0; i < inputsize; i++)
     {
         temp += math_exp(input[i] + bias[i]);
     }
     for(int i = 0; i < inputsize; i++)
     {
-        output[i] = ((input[i] + bias[i]) << FLOATPOINT) / temp;
+        output[i] = ((ldattp)(input[i] + bias[i]) << FLOATPOINT) / temp;
     }
     for(int i = 0; i < inputsize; i++)
     {
@@ -319,29 +319,29 @@ int matrix_softmax_10(int input[10],
  *      2. 改为C风格(2018-1-9)
  *      3. 改为定点数(2018-1-10)
  */
-void matrix_pooling_24(int input[24][24], int output[12][12])
+void matrix_pooling_24(dattp input[24][24], dattp output[12][12])
 {
     int size = 24;
     for(int i = 0;i < size; i += 2)
     {
         for(int j = 0;j < size; j += 2)
         {
-            int temp1 = input[i][j] > input[i][j + 1] ? input[i][j] : input[i][j + 1];
-            int temp2 = input[i + 1][j] > input[i + 1][j + 1] ? input[i + 1][j] : input[i + 1][j + 1];
+            dattp temp1 = input[i][j] > input[i][j + 1] ? input[i][j] : input[i][j + 1];
+            dattp temp2 = input[i + 1][j] > input[i + 1][j + 1] ? input[i + 1][j] : input[i + 1][j + 1];
             output[i >> 1][j >> 1] = temp1 > temp2 ? temp1 : temp2;
         }
     }
     return;
 }
-void matrix_pooling_8(int input[8][8], int output[4][4])
+void matrix_pooling_8(dattp input[8][8], dattp output[4][4])
 {
     int size = 8;
     for(int i = 0;i < size; i += 2)
     {
         for(int j = 0;j < size; j += 2)
         {
-            int temp1 = input[i][j] > input[i][j + 1] ? input[i][j] : input[i][j + 1];
-            int temp2 = input[i + 1][j] > input[i + 1][j + 1] ? input[i + 1][j] : input[i + 1][j + 1];
+            dattp temp1 = input[i][j] > input[i][j + 1] ? input[i][j] : input[i][j + 1];
+            dattp temp2 = input[i + 1][j] > input[i + 1][j + 1] ? input[i + 1][j] : input[i + 1][j + 1];
             output[i >> 1][j >> 1] = temp1 > temp2 ? temp1 : temp2;
         }
     }
@@ -358,42 +358,42 @@ void matrix_pooling_8(int input[8][8], int output[4][4])
  *      2. temp的类型由int改为float
  *      3. 改为定点数(2018-1-10)
  */
-void matrix_MMV_256_128(int x[256], int weight[128][256], int output[128])
+void matrix_MMV_256_128(dattp x[256], dattp weight[128][256], dattp output[128])
 {
     int input_size = 256;
     int output_size = 128;
     for(int i = 0; i < output_size; i++)
     {
-#ifdef X86
-        int temp = 0;
+#if (defined X86) || (defined RISCV)
+        dattp temp = 0;
         for(int j = 0; j < input_size; j++)
         {
-            temp += (x[j] * weight[i][j]) >> FLOATPOINT;
+            temp += ((ldattp)x[j] * (ldattp)weight[i][j]) >> FLOATPOINT;
         }
         output[i] = temp;
 #endif // X86
-#ifdef RISCV
+#ifdef RISCV_DLA
         output[i] = matrix_MMV_256_s(x, weight[i]);
 #endif // RISCV
     }
     return;
 }
 
-void matrix_MMV_128_10(int x[128], int weight[10][128], int output[10])
+void matrix_MMV_128_10(dattp x[128], dattp weight[10][128], dattp output[10])
 {
     int input_size = 128;
     int output_size = 10;
     for(int i = 0; i < output_size; i++)
     {
-#ifdef X86
-        int temp = 0;
+#if (defined X86) || (defined RISCV)
+        dattp temp = 0;
         for(int j = 0; j < input_size; j++)
         {
-            temp += x[j] * weight[i][j] >> FLOATPOINT;
+            temp += ((ldattp)x[j] * (ldattp)weight[i][j]) >> FLOATPOINT;
         }
         output[i] = temp;
 #endif // X86
-#ifdef RISCV
+#ifdef RISCV_DLA
         output[i] = matrix_MMV_128_s(x, weight[i]);
 #endif // RISCV
     }
