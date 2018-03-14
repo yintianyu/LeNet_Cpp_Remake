@@ -13,8 +13,14 @@
 
 
 int main() {
+#ifdef X86
     dattp feature[BATCH_SIZE][FEATURE_SIZE][FEATURE_SIZE] = {0};
     unsigned char Mnist_Label[BATCH_SIZE] = {0};
+#endif // X86
+#if (defined RISCV) || (defined RISCV_DLA)
+    dattp **feature[5] = {(dattp**)0xF00231B8, (dattp**)(0xF00231B8 + 3136 * 1), (dattp**)(0xF00231B8 + 3136 * 2), (dattp**)(0xF00231B8 + 3136 * 3), (dattp**)(0xF00231B8 + 3136 * 4)};
+    unsigned char *Mnist_Label = (unsigned char*)0xF0026EF8;
+#endif
     int correct_count = 0;
     int read_status;
 #ifdef RISCV
@@ -33,10 +39,12 @@ int main() {
     {
         dattp reference;
         dattp answer;
+#ifdef X86
         read_status = read_Mnist(t * BATCH_SIZE, (t + 1) * BATCH_SIZE, feature, Mnist_Label);
+#endif
 #ifdef RISCV
         printf("Read Mnist Finished.\n");
-        printf("Label[0] = %d\n", Mnist_Label[0]);
+        printf("Label[0] = 0x%x\n", Mnist_Label[0]);
 #endif
         if(0 != read_status)
         {
@@ -49,17 +57,17 @@ int main() {
             answer = Mnist_Label[j];
             if (answer == reference)
             {
-                printf("Batch No.%d, Picture No.%d Correct!\n", t, j);
+                printf("Batch No.0x%x, Picture No.0x%x Correct!\n", t, j);
                 correct_count++;
             }
             else
             {
-                printf("Batch No.%d, Picture No.%d Incorrect: %d:%d\n", t, j, answer, reference);
+                printf("Batch No.0x%x, Picture No.0x%x Incorrect: 0x%x:0x%x\n", t, j, answer, reference);
             }
         }
 
     }
-    printf("Finished! Correct Number:%d.\n", correct_count);
+    printf("Finished! Correct Number:0x%x.\n", correct_count);
 	return 0;
 }
 

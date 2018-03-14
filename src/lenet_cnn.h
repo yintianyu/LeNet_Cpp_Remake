@@ -12,6 +12,7 @@ dattp cnn(dattp picture[FEATURE_SIZE][FEATURE_SIZE]);
 //void cnn_init();
 
 
+#ifdef X86
 /*typedef*/
 struct maps1{
     dattp W[CONV_1_KERNEL_SIZE][CONV_1_KERNEL_SIZE];
@@ -49,9 +50,47 @@ struct dense8_layer{
     dattp W[DENSE_8_OUTPUT_NUMBER][DENSE_8_INPUT_NUMBER];
     dattp bias[DENSE_8_OUTPUT_NUMBER];
 };
-//
-//template<int MAP_NUM, int KERNEL_SIZE, int OUTPUT_NUMBER, int OUT_SIZE>
-//void cnn_init_onelayer(conv_layer<MAP_NUM, KERNEL_SIZE, OUTPUT_NUMBER, OUT_SIZE> *pstLayer, float initnumber);
+#endif
+
+#if (defined RISCV) || (defined RISCV_DLA)
+/*typedef*/
+struct maps1{
+    dattp **W;
+};
+
+struct maps3{
+    dattp **W;
+};
+
+struct maps4{
+    dattp **W;
+};
+
+struct conv1_layer{
+    struct maps1 maps[CONV_1_MAP_NUMBER];
+    dattp *bias;
+};
+
+struct conv3_layer{
+    struct maps3 maps[CONV_3_MAP_NUMBER];
+    dattp *bias;
+};
+
+struct conv4_layer{
+    struct maps4 maps[CONV_4_MAP_NUMBER];
+    dattp *bias;
+};
+
+struct dense7_layer{
+    dattp **W;
+    dattp *bias;
+};
+
+struct dense8_layer{
+    dattp **W;
+    dattp *bias;
+};
+#endif
 
 void forward_Conv_1(dattp picture[][FEATURE_SIZE]);
 void forward_Pooling_2();
@@ -71,6 +110,18 @@ extern struct conv4_layer Conv_4;
 extern struct dense7_layer Dense_7;
 extern struct dense8_layer Dense_8;
 
+
+#if (defined RISCV) || (defined RISCV_DLA)
+extern dattp** image1[6];
+extern dattp** image2[6];
+extern dattp** image3[8];
+extern dattp** image4[16];
+extern dattp** image5[16];
+extern dattp* image6;
+extern dattp* image7;
+extern dattp* image8;
+#endif
+#ifdef X86
 extern dattp image1[CONV_1_OUTPUT_NUMBER][CONV_1_OUTPUT_SIZE][CONV_1_OUTPUT_SIZE];
 extern dattp image2[POOLING_2_OUTPUT_NUMBER][POOLING_2_OUTPUT_SIZE][POOLING_2_OUTPUT_SIZE];
 extern dattp image3[CONV_3_OUTPUT_NUMBER][CONV_3_OUTPUT_SIZE][CONV_3_OUTPUT_SIZE];
@@ -78,5 +129,6 @@ extern dattp image4[CONV_4_OUTPUT_NUMBER][CONV_4_OUTPUT_SIZE][CONV_4_OUTPUT_SIZE
 extern dattp image5[POOLING_5_OUTPUT_NUMBER][POOLING_5_OUTPUT_SIZE][POOLING_5_OUTPUT_SIZE];
 extern dattp image6[FLATTEN_6_OUTPUT_NUMBER];
 extern dattp image7[DENSE_7_OUTPUT_NUMBER];
+#endif
 
 #endif /* LENET_CNN_H_ */

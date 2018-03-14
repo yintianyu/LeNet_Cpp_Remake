@@ -269,60 +269,71 @@ int read_data()
 #endif
 
 #ifdef RISCV
-int read_Mnist(int begin_number, int end_number, dattp Feature[][FEATURE_SIZE][FEATURE_SIZE], unsigned char label[])
-{
-    void *pstFeatureStart = (void*)(ADDRESS_MNIST_FEATURE + FEATURE_SIZE * FEATURE_SIZE * begin_number);
-    memcpy(Feature, pstFeatureStart, SIZE_FEATURE * (end_number - begin_number));
-
-    void *pstLabelStart = (void*)(ADDRESS_MNIST_LABEL + SIZE_LABEL * begin_number);
-    memcpy(label, pstLabelStart, SIZE_LABEL * (end_number - begin_number));
-    return 0;
-}
+//int read_Mnist(int begin_number, int end_number, dattp Feature[][FEATURE_SIZE][FEATURE_SIZE], unsigned char label[])
+//{
+//    void *pstFeatureStart = (void*)(ADDRESS_MNIST_FEATURE + FEATURE_SIZE * FEATURE_SIZE * begin_number);
+//    memcpy(Feature, pstFeatureStart, SIZE_FEATURE * (end_number - begin_number));
+//
+//    void *pstLabelStart = (void*)(ADDRESS_MNIST_LABEL + SIZE_LABEL * begin_number);
+//    memcpy(label, pstLabelStart, SIZE_LABEL * (end_number - begin_number));
+//    return 0;
+//}
 
 
 
 int read_data()
 {
-    void *pstTemp = NULL;
+//    void *pstTemp = NULL;
     //Read Conv1
     for(int i = 0; i < CONV_1_OUTPUT_NUMBER; i++)
     {
-        pstTemp = (void*)(ADDRESS_CONV1_WEIGHT + i * SIZE_DATA * CONV_1_KERNEL_SIZE * CONV_1_KERNEL_SIZE);
-        memcpy(Conv_1.maps[i].W, pstTemp, SIZE_DATA * CONV_1_KERNEL_SIZE * CONV_1_KERNEL_SIZE);
+        dattp** pstTemp = (dattp**)(ADDRESS_CONV1_WEIGHT + i * SIZE_DATA * CONV_1_KERNEL_SIZE * CONV_1_KERNEL_SIZE);
+//        memcpy(Conv_1.maps[i].W, pstTemp, SIZE_DATA * CONV_1_KERNEL_SIZE * CONV_1_KERNEL_SIZE);
+        Conv_1.maps[i].W = pstTemp;
     }
-    pstTemp = (void*)ADDRESS_CONV1_BIAS;
-    memcpy(Conv_1.bias, pstTemp, SIZE_DATA * CONV_1_OUTPUT_NUMBER);
+    dattp* pstTemp = (dattp*)ADDRESS_CONV1_BIAS;
+//    memcpy(Conv_1.bias, pstTemp, SIZE_DATA * CONV_1_OUTPUT_NUMBER);
+    Conv_1.bias = pstTemp;
 
 
     //Read Conv3
     for(int i = 0; i < CONV_3_OUTPUT_NUMBER * POOLING_2_OUTPUT_NUMBER; i++)
     {
-        pstTemp = (void*)(ADDRESS_CONV3_WEIGHT + i * SIZE_DATA * CONV_3_KERNEL_SIZE * CONV_3_KERNEL_SIZE);
-        memcpy(Conv_3.maps[i].W, pstTemp, SIZE_DATA * CONV_3_KERNEL_SIZE * CONV_3_KERNEL_SIZE);
+        dattp** pstTemp = (dattp**)(ADDRESS_CONV3_WEIGHT + i * SIZE_DATA * CONV_3_KERNEL_SIZE * CONV_3_KERNEL_SIZE);
+//        memcpy(Conv_3.maps[i].W, pstTemp, SIZE_DATA * CONV_3_KERNEL_SIZE * CONV_3_KERNEL_SIZE);
+        Conv_3.maps[i].W = pstTemp;
     }
-    pstTemp = (void*)ADDRESS_CONV3_BIAS;
-    memcpy(Conv_3.bias, pstTemp, SIZE_DATA * CONV_3_OUTPUT_NUMBER);
+    pstTemp = (dattp*)ADDRESS_CONV3_BIAS;
+//    memcpy(Conv_3.bias, pstTemp, SIZE_DATA * CONV_3_OUTPUT_NUMBER);
+    Conv_3.bias = pstTemp;
 
     //Read Conv4
     for(int i = 0; i < CONV_4_OUTPUT_NUMBER * CONV_3_OUTPUT_NUMBER; i++)
     {
-        pstTemp = (void*)(ADDRESS_CONV4_WEIGHT + i * SIZE_DATA * CONV_4_KERNEL_SIZE * CONV_4_KERNEL_SIZE);
-        memcpy(Conv_4.maps[i].W, pstTemp, SIZE_DATA * CONV_4_KERNEL_SIZE * CONV_4_KERNEL_SIZE);
+        dattp** pstTemp = (dattp**)(ADDRESS_CONV4_WEIGHT + i * SIZE_DATA * CONV_4_KERNEL_SIZE * CONV_4_KERNEL_SIZE);
+//        memcpy(Conv_4.maps[i].W, pstTemp, SIZE_DATA * CONV_4_KERNEL_SIZE * CONV_4_KERNEL_SIZE);
+        Conv_4.maps[i].W = pstTemp;
     }
-    pstTemp = (void*)ADDRESS_CONV4_BIAS;
-    memcpy(Conv_4.bias, pstTemp, SIZE_DATA * CONV_4_OUTPUT_NUMBER);
+    pstTemp = (dattp*)ADDRESS_CONV4_BIAS;
+//    memcpy(Conv_4.bias, pstTemp, SIZE_DATA * CONV_4_OUTPUT_NUMBER);
+    Conv_4.bias = pstTemp;
 
     //Read Dense7
-    pstTemp = (void*)ADDRESS_DENSE7_WEIGHT;
-    memcpy(Dense_7.W, pstTemp, SIZE_DATA * DENSE_7_INPUT_NUMBER * DENSE_7_OUTPUT_NUMBER);
-    pstTemp = (void*)ADDRESS_DENSE7_BIAS;
-    memcpy(Dense_7.bias, pstTemp, SIZE_DATA * DENSE_7_OUTPUT_NUMBER);
+    dattp** pstpstTemp = (dattp**)ADDRESS_DENSE7_WEIGHT;
+//    memcpy(Dense_7.W, pstTemp, SIZE_DATA * DENSE_7_INPUT_NUMBER * DENSE_7_OUTPUT_NUMBER);
+    Dense_7.W = pstpstTemp;
+    pstTemp = (dattp*)ADDRESS_DENSE7_BIAS;
+//    memcpy(Dense_7.bias, pstTemp, SIZE_DATA * DENSE_7_OUTPUT_NUMBER);
+    Dense_7.bias = pstTemp;
 
     //Read Dense8
-    pstTemp = (void*)ADDRESS_DENSE8_WEIGHT;
-    memcpy(Dense_8.W, pstTemp, SIZE_DATA * DENSE_8_INPUT_NUMBER * DENSE_8_OUTPUT_NUMBER);
-    pstTemp = (void*)ADDRESS_DENSE7_BIAS;
-    memcpy(Dense_8.bias, pstTemp, SIZE_DATA * DENSE_8_OUTPUT_NUMBER);
+    pstpstTemp = (dattp**)ADDRESS_DENSE8_WEIGHT;
+//    memcpy(Dense_8.W, pstTemp, SIZE_DATA * DENSE_8_INPUT_NUMBER * DENSE_8_OUTPUT_NUMBER);
+    Dense_8.W = pstpstTemp;
+    pstTemp = (dattp*)ADDRESS_DENSE7_BIAS;
+//    memcpy(Dense_8.bias, pstTemp, SIZE_DATA * DENSE_8_OUTPUT_NUMBER);
+    Dense_8.bias = pstTemp;
+
 
 
     return 0;
